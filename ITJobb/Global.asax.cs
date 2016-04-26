@@ -1,5 +1,7 @@
-﻿using System;
+﻿using ITJobb.Models;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -12,6 +14,9 @@ namespace ITJobb
     {
         protected void Application_Start()
         {
+            //Database.SetInitializer<OrderingContext>(new DropCreateDatabaseIfModelChanges<OrderingContext>());
+
+            Database.SetInitializer<ITJobbDbContext>(new AnvandareInitiallizer());
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
