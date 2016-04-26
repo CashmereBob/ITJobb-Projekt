@@ -1,0 +1,64 @@
+﻿@model ITJobb.Models.FöretagsAnnons
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>FöretagsAnnons</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Ort.OrtNamn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ort.OrtNamn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Yrkestitel.YrkesNamn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Yrkestitel.YrkesNamn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AnnonsURL)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AnnonsURL)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Målsida.MålsidaNamn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Målsida.MålsidaNamn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Rekryterare.FöretagsNamn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Rekryterare.FöretagsNamn)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

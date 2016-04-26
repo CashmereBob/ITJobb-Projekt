@@ -1,0 +1,58 @@
+﻿@model ITJobb.Models.PersonAnnons
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>PersonAnnons</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Ort.OrtNamn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ort.OrtNamn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Yrkestitel.YrkesNamn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Yrkestitel.YrkesNamn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Titel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Titel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Beskrivning)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Beskrivning)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Användare.FörNamn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Användare.FörNamn)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.AnnonsId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,58 @@
+﻿@model ITJobb.Models.FöretagsAnnons
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>FöretagsAnnons</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Ort.OrtNamn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ort.OrtNamn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Yrkestitel.YrkesNamn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Yrkestitel.YrkesNamn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AnnonsURL)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AnnonsURL)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Målsida.MålsidaNamn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Målsida.MålsidaNamn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Rekryterare.FöretagsNamn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Rekryterare.FöretagsNamn)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.AnnonsId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,42 @@
+﻿@model ITJobb.Models.Rekryterare
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Rekryterare</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FöretagsNamn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FöretagsNamn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RekryterareURL)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RekryterareURL)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MailAdress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MailAdress)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.RekryterareId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
