@@ -315,16 +315,22 @@ namespace ITJobb.Models
 
             new PersonAnnons
              {
+                YrkestitelRefId = 1,
+                 OrtRefId = 2,
                  Titel = "Jobb i Helsingborg",
                  Beskrivning = "Lorum Porum",
+                 AnvandareRefId = 2
 
 
 
              },
              new PersonAnnons
              {
+                 YrkestitelRefId = 1,
+                 OrtRefId = 2,
                  Titel = "Jobb?",
                  Beskrivning = "Lorum Porum",
+                 AnvandareRefId = 2
 
 
 
