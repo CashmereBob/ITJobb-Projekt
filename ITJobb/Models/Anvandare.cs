@@ -5,20 +5,20 @@ using System.Web;
 
 namespace ITJobb.Models
 {
-    public class Användare
+    public class Anvandare
     {
-        public int AnvändareId { get; set; }
-        public string FörNamn { get; set; }
+        public int AnvandareId { get; set; }
+        public string ForNamn { get; set; }
         public string EfterNamn { get; set; }
         public string TelefonNummer { get; set; }
         public string MailAdress { get; set; }
         public string CVURL { get; set; }
         public string PersonligtBrevURL { get; set; }
-        public Användare()
+        public Anvandare()
         {
-            this.FöretagsAnnonser = new HashSet<FöretagsAnnons>();
+            this.ForetagsAnnonser = new HashSet<ForetagsAnnons>();
         }
-        public virtual ICollection<FöretagsAnnons> FöretagsAnnonser { get; set; }
+        public virtual ICollection<ForetagsAnnons> ForetagsAnnonser { get; set; }
 
 
 

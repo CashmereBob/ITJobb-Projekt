@@ -46,7 +46,7 @@ namespace ITJobb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "RekryterareId,FöretagsNamn,RekryterareURL,MailAdress")] Rekryterare rekryterare)
+        public ActionResult Create([Bind(Include = "RekryterareId,ForetagsNamn,RekryterareURL,MailAdress")] Rekryterare rekryterare)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +78,7 @@ namespace ITJobb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "RekryterareId,FöretagsNamn,RekryterareURL,MailAdress")] Rekryterare rekryterare)
+        public ActionResult Edit([Bind(Include = "RekryterareId,ForetagsNamn,RekryterareURL,MailAdress")] Rekryterare rekryterare)
         {
             if (ModelState.IsValid)
             {

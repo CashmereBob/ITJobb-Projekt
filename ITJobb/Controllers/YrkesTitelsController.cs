@@ -46,7 +46,7 @@ namespace ITJobb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "YrkesTitelId,YrkesNamn,MedelLön")] YrkesTitel yrkesTitel)
+        public ActionResult Create([Bind(Include = "YrkesTitelId,YrkesNamn,MedelLon")] YrkesTitel yrkesTitel)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +78,7 @@ namespace ITJobb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "YrkesTitelId,YrkesNamn,MedelLön")] YrkesTitel yrkesTitel)
+        public ActionResult Edit([Bind(Include = "YrkesTitelId,YrkesNamn,MedelLon")] YrkesTitel yrkesTitel)
         {
             if (ModelState.IsValid)
             {

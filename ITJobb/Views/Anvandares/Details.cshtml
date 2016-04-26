@@ -1,0 +1,66 @@
+﻿@model ITJobb.Models.Anvandare
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Anvandare</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ForNamn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ForNamn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EfterNamn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EfterNamn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TelefonNummer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TelefonNummer)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MailAdress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MailAdress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CVURL)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CVURL)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonligtBrevURL)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PersonligtBrevURL)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.AnvandareId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

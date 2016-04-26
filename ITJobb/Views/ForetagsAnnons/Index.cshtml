@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ITJobb.Models.FöretagsAnnons>
+﻿@model IEnumerable<ITJobb.Models.ForetagsAnnons>
 
 @{
     ViewBag.Title = "Index";
@@ -21,10 +21,10 @@
             @Html.DisplayNameFor(model => model.AnnonsURL)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Målsida.MålsidaNamn)
+            @Html.DisplayNameFor(model => model.Malsida.MalsidaNamn)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Rekryterare.FöretagsNamn)
+            @Html.DisplayNameFor(model => model.Rekryterare.ForetagsNamn)
         </th>
         <th></th>
     </tr>
@@ -41,10 +41,10 @@
             @Html.DisplayFor(modelItem => item.AnnonsURL)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Målsida.MålsidaNamn)
+            @Html.DisplayFor(modelItem => item.Malsida.MalsidaNamn)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Rekryterare.FöretagsNamn)
+            @Html.DisplayFor(modelItem => item.Rekryterare.ForetagsNamn)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.AnnonsId }) |

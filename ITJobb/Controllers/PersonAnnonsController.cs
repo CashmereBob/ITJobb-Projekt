@@ -17,7 +17,7 @@ namespace ITJobb.Controllers
         // GET: PersonAnnons
         public ActionResult Index()
         {
-            var annonses = db.PersonAnnonses.Include(p => p.Ort).Include(p => p.Yrkestitel).Include(p => p.Användare);
+            var annonses = db.PersonAnnonses.Include(p => p.Ort).Include(p => p.Yrkestitel).Include(p => p.Anvandare);
             return View(annonses.ToList());
         }
 
@@ -28,7 +28,7 @@ namespace ITJobb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PersonAnnons personAnnons = db.Annonses.Find(id) as PersonAnnons;
+            PersonAnnons personAnnons = db.PersonAnnonses.Find(id);
             if (personAnnons == null)
             {
                 return HttpNotFound();
@@ -41,7 +41,7 @@ namespace ITJobb.Controllers
         {
             ViewBag.OrtRefId = new SelectList(db.Orts, "OrtId", "OrtNamn");
             ViewBag.YrkestitelRefId = new SelectList(db.Yrkestitels, "YrkesTitelId", "YrkesNamn");
-            ViewBag.AnvändareRefId = new SelectList(db.Användares, "AnvändareId", "FörNamn");
+            ViewBag.AnvandareRefId = new SelectList(db.Anvandares, "AnvandareId", "ForNamn");
             return View();
         }
 
@@ -50,7 +50,7 @@ namespace ITJobb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "AnnonsId,YrkestitelRefId,OrtRefId,Titel,Beskrivning,AnvändareRefId")] PersonAnnons personAnnons)
+        public ActionResult Create([Bind(Include = "AnnonsId,YrkestitelRefId,OrtRefId,Titel,Beskrivning,AnvandareRefId")] PersonAnnons personAnnons)
         {
             if (ModelState.IsValid)
             {
@@ -61,7 +61,7 @@ namespace ITJobb.Controllers
 
             ViewBag.OrtRefId = new SelectList(db.Orts, "OrtId", "OrtNamn", personAnnons.OrtRefId);
             ViewBag.YrkestitelRefId = new SelectList(db.Yrkestitels, "YrkesTitelId", "YrkesNamn", personAnnons.YrkestitelRefId);
-            ViewBag.AnvändareRefId = new SelectList(db.Användares, "AnvändareId", "FörNamn", personAnnons.AnvändareRefId);
+            ViewBag.AnvandareRefId = new SelectList(db.Anvandares, "AnvandareId", "ForNamn", personAnnons.AnvandareRefId);
             return View(personAnnons);
         }
 
@@ -72,14 +72,14 @@ namespace ITJobb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PersonAnnons personAnnons = db.Annonses.Find(id) as PersonAnnons;
+            PersonAnnons personAnnons = db.PersonAnnonses.Find(id);
             if (personAnnons == null)
             {
                 return HttpNotFound();
             }
             ViewBag.OrtRefId = new SelectList(db.Orts, "OrtId", "OrtNamn", personAnnons.OrtRefId);
             ViewBag.YrkestitelRefId = new SelectList(db.Yrkestitels, "YrkesTitelId", "YrkesNamn", personAnnons.YrkestitelRefId);
-            ViewBag.AnvändareRefId = new SelectList(db.Användares, "AnvändareId", "FörNamn", personAnnons.AnvändareRefId);
+            ViewBag.AnvandareRefId = new SelectList(db.Anvandares, "AnvandareId", "ForNamn", personAnnons.AnvandareRefId);
             return View(personAnnons);
         }
 
@@ -88,7 +88,7 @@ namespace ITJobb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "AnnonsId,YrkestitelRefId,OrtRefId,Titel,Beskrivning,AnvändareRefId")] PersonAnnons personAnnons)
+        public ActionResult Edit([Bind(Include = "AnnonsId,YrkestitelRefId,OrtRefId,Titel,Beskrivning,AnvandareRefId")] PersonAnnons personAnnons)
         {
             if (ModelState.IsValid)
             {
@@ -98,7 +98,7 @@ namespace ITJobb.Controllers
             }
             ViewBag.OrtRefId = new SelectList(db.Orts, "OrtId", "OrtNamn", personAnnons.OrtRefId);
             ViewBag.YrkestitelRefId = new SelectList(db.Yrkestitels, "YrkesTitelId", "YrkesNamn", personAnnons.YrkestitelRefId);
-            ViewBag.AnvändareRefId = new SelectList(db.Användares, "AnvändareId", "FörNamn", personAnnons.AnvändareRefId);
+            ViewBag.AnvandareRefId = new SelectList(db.Anvandares, "AnvandareId", "ForNamn", personAnnons.AnvandareRefId);
             return View(personAnnons);
         }
 
@@ -109,7 +109,7 @@ namespace ITJobb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PersonAnnons personAnnons = db.Annonses.Find(id) as PersonAnnons;
+            PersonAnnons personAnnons = db.PersonAnnonses.Find(id);
             if (personAnnons == null)
             {
                 return HttpNotFound();
@@ -122,7 +122,7 @@ namespace ITJobb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            PersonAnnons personAnnons = db.Annonses.Find(id) as PersonAnnons;
+            PersonAnnons personAnnons = db.PersonAnnonses.Find(id);
             db.Annonses.Remove(personAnnons);
             db.SaveChanges();
             return RedirectToAction("Index");

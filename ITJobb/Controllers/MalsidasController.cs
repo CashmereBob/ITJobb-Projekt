@@ -10,116 +10,107 @@ using ITJobb.Models;
 
 namespace ITJobb.Controllers
 {
-    public class AnnonsController : Controller
+    public class MalsidasController : Controller
     {
         private ITJobbDbContext db = new ITJobbDbContext();
 
-        // GET: Annons
+        // GET: Malsidas
         public ActionResult Index()
         {
-            var annonses = db.Annonses.Include(a => a.Ort).Include(a => a.Yrkestitel);
-            return View(annonses.ToList());
+            return View(db.Malsidas.ToList());
         }
 
-        // GET: Annons/Details/5
+        // GET: Malsidas/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Annons annons = db.Annonses.Find(id);
-            if (annons == null)
+            Malsida malsida = db.Malsidas.Find(id);
+            if (malsida == null)
             {
                 return HttpNotFound();
             }
-            return View(annons);
+            return View(malsida);
         }
 
-        // GET: Annons/Create
+        // GET: Malsidas/Create
         public ActionResult Create()
         {
-            ViewBag.OrtRefId = new SelectList(db.Orts, "OrtId", "OrtNamn");
-            ViewBag.YrkestitelRefId = new SelectList(db.Yrkestitels, "YrkesTitelId", "YrkesNamn");
             return View();
         }
 
-        // POST: Annons/Create
+        // POST: Malsidas/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "AnnonsId,YrkestitelRefId,OrtRefId")] Annons annons)
+        public ActionResult Create([Bind(Include = "MalsidaId,MalsidaNamn,MalsidaUrl")] Malsida malsida)
         {
             if (ModelState.IsValid)
             {
-                db.Annonses.Add(annons);
+                db.Malsidas.Add(malsida);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.OrtRefId = new SelectList(db.Orts, "OrtId", "OrtNamn", annons.OrtRefId);
-            ViewBag.YrkestitelRefId = new SelectList(db.Yrkestitels, "YrkesTitelId", "YrkesNamn", annons.YrkestitelRefId);
-            return View(annons);
+            return View(malsida);
         }
 
-        // GET: Annons/Edit/5
+        // GET: Malsidas/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Annons annons = db.Annonses.Find(id);
-            if (annons == null)
+            Malsida malsida = db.Malsidas.Find(id);
+            if (malsida == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.OrtRefId = new SelectList(db.Orts, "OrtId", "OrtNamn", annons.OrtRefId);
-            ViewBag.YrkestitelRefId = new SelectList(db.Yrkestitels, "YrkesTitelId", "YrkesNamn", annons.YrkestitelRefId);
-            return View(annons);
+            return View(malsida);
         }
 
-        // POST: Annons/Edit/5
+        // POST: Malsidas/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "AnnonsId,YrkestitelRefId,OrtRefId")] Annons annons)
+        public ActionResult Edit([Bind(Include = "MalsidaId,MalsidaNamn,MalsidaUrl")] Malsida malsida)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(annons).State = EntityState.Modified;
+                db.Entry(malsida).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.OrtRefId = new SelectList(db.Orts, "OrtId", "OrtNamn", annons.OrtRefId);
-            ViewBag.YrkestitelRefId = new SelectList(db.Yrkestitels, "YrkesTitelId", "YrkesNamn", annons.YrkestitelRefId);
-            return View(annons);
+            return View(malsida);
         }
 
-        // GET: Annons/Delete/5
+        // GET: Malsidas/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Annons annons = db.Annonses.Find(id);
-            if (annons == null)
+            Malsida malsida = db.Malsidas.Find(id);
+            if (malsida == null)
             {
                 return HttpNotFound();
             }
-            return View(annons);
+            return View(malsida);
         }
 
-        // POST: Annons/Delete/5
+        // POST: Malsidas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Annons annons = db.Annonses.Find(id);
-            db.Annonses.Remove(annons);
+            Malsida malsida = db.Malsidas.Find(id);
+            db.Malsidas.Remove(malsida);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

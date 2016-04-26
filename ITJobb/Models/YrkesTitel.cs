@@ -9,7 +9,7 @@ namespace ITJobb.Models
     {
         public int YrkesTitelId { get; set; }
         public string YrkesNamn { get; set; }
-        public decimal MedelLön { get; set; }
+        public decimal MedelLon { get; set; }
 
         public YrkesTitel()
         {

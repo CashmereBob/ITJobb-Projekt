@@ -12,9 +12,9 @@ namespace ITJobb.Models
         {
         }
         public DbSet<Annons> Annonses { get; set; }
-        public DbSet<Användare> Användares { get; set; }
-        public DbSet<FöretagsAnnons> FöretagsAnnonses { get; set; }
-        public DbSet<Målsida> Målsidas { get; set; }
+        public DbSet<Anvandare> Anvandares { get; set; }
+        public DbSet<ForetagsAnnons> ForetagsAnnonses { get; set; }
+        public DbSet<Malsida> Malsidas { get; set; }
         public DbSet<Ort> Orts { get; set; }
         public DbSet<PersonAnnons> PersonAnnonses { get; set; }
         public DbSet<Rekryterare> Rekryterares { get; set; }

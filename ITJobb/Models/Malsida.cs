@@ -5,14 +5,13 @@ using System.Web;
 
 namespace ITJobb.Models
 {
-    public class Rekryterare
+    public class Malsida
     {
-        public int RekryterareId { get; set; }
-        public string ForetagsNamn { get; set; }
-        public string RekryterareURL { get; set; }
-        public string MailAdress { get; set; }
+        public int MalsidaId { get; set; }
+        public string MalsidaNamn { get; set; }
+        public string MalsidaUrl { get; set; }
 
-        public Rekryterare()
+        public Malsida()
         {
             this.Annonser = new HashSet<ForetagsAnnons>();
         }

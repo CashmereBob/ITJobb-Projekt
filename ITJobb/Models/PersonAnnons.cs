@@ -13,9 +13,9 @@ namespace ITJobb.Models
         public string Titel { get; set; }
         public string Beskrivning { get; set; }
 
-        public int? AnvändareRefId { get; set; }
-        [ForeignKey("AnvändareRefId")]
-        public Användare Användare { get; set; }
+        public int? AnvandareRefId { get; set; }
+        [ForeignKey("AnvandareRefId")]
+        public Anvandare Anvandare { get; set; }
 
 
     }

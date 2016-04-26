@@ -15,7 +15,7 @@ namespace ITJobb.Models
         {
             this.Tags = new HashSet<Tag>();
         }
-  
+
         public int AnnonsId { get; set; }
 
         public int? YrkestitelRefId { get; set; }
