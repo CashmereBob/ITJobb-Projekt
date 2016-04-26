@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
 
@@ -116,7 +117,7 @@ namespace ITJobb.Models
              }
 
           };
-            Anvandares.ForEach(c => context.Anvandares.Add(c));
+            Anvandares.ForEach(c => context.Anvandares.AddOrUpdate(c));
 
             List<Ort> Ort = new List<Ort>
             {
@@ -173,9 +174,9 @@ namespace ITJobb.Models
              }
 
           };
-            Ort.ForEach(c => context.Orts.Add(c));
+            Ort.ForEach(c => context.Orts.AddOrUpdate(c));
 
-            Anvandares.ForEach(c => context.Anvandares.Add(c));
+     
 
             List<Malsida> Malsida = new List<Malsida>
             {
@@ -207,7 +208,7 @@ namespace ITJobb.Models
             
 
           };
-            Malsida.ForEach(c => context.Malsidas.Add(c));
+            Malsida.ForEach(c => context.Malsidas.AddOrUpdate(c));
 
             List<Tag> Tag = new List<Tag>
             {
@@ -235,7 +236,7 @@ namespace ITJobb.Models
 
 
           };
-            Tag.ForEach(c => context.Tages.Add(c));
+            Tag.ForEach(c => context.Tages.AddOrUpdate(c));
 
             List<YrkesTitel> YrkesTitel = new List<YrkesTitel>
             {
@@ -269,7 +270,7 @@ namespace ITJobb.Models
 
 
           };
-            YrkesTitel.ForEach(c => context.Yrkestitels.Add(c));
+            YrkesTitel.ForEach(c => context.Yrkestitels.AddOrUpdate(c));
 
             List<Rekryterare> Rekryterare = new List<Rekryterare>
             {
@@ -305,7 +306,9 @@ namespace ITJobb.Models
 
 
           };
-            Rekryterare.ForEach(c => context.Rekryterares.Add(c));
+            Rekryterare.ForEach(c => context.Rekryterares.AddOrUpdate(c));
+
+            context.SaveChanges();
 
             List<PersonAnnons> PersonAnnons = new List<PersonAnnons>
             {
@@ -328,27 +331,33 @@ namespace ITJobb.Models
              },
              new PersonAnnons
              {
+                 YrkestitelRefId = 2,
+                 OrtRefId = 3,
                  Titel = "Söker arbete som systemutvecklare!",
                  Beskrivning = "Lorum Porum",
-
+                 AnvandareRefId = 3
 
 
 
              },
              new PersonAnnons
              {
-
+                 YrkestitelRefId = 3,
+                 OrtRefId = 4,
                  Titel = "Ett Jobb till mig?",
                  Beskrivning = "Lorum Porum",
-
+                 AnvandareRefId = 4
 
 
 
              },
              new PersonAnnons
              {
+                 YrkestitelRefId = 4,
+                 OrtRefId = 5,
                  Titel = "Jag Söker Jobb",
                  Beskrivning = "Lorum Porum",
+                 AnvandareRefId = 5
 
 
 
@@ -356,50 +365,60 @@ namespace ITJobb.Models
 
 
           };
-            PersonAnnons.ForEach(c => context.PersonAnnonses.Add(c));
+            PersonAnnons.ForEach(c => context.PersonAnnonses.AddOrUpdate(c));
 
             List<ForetagsAnnons> ForetagsAnnons = new List<ForetagsAnnons>
             {
 
             new ForetagsAnnons
              {
-
+                 YrkestitelRefId = 1,
+                 OrtRefId = 1,
                  AnnonsURL = "www.lorumporum.se",
-
+                 RekryterareRefId = 1,
+                 MalsidaRefId = 4
 
              },
              new ForetagsAnnons
              {
-
+                 YrkestitelRefId = 1,
+                 OrtRefId = 2,
                  AnnonsURL = "www.lorumporum.se",
-
+                 RekryterareRefId = 2,
+                 MalsidaRefId = 4
 
              },
              new ForetagsAnnons
              {
-
+                 YrkestitelRefId = 2,
+                 OrtRefId = 3,
                  AnnonsURL = "www.lorumporum.se",
-
+                 RekryterareRefId = 3,
+                 MalsidaRefId = 3
 
              },
              new ForetagsAnnons
              {
-
+                 YrkestitelRefId = 3,
+                 OrtRefId = 4,
                  AnnonsURL = "www.lorumporum.se",
-
+                 RekryterareRefId = 4,
+                 MalsidaRefId = 2
 
              },
              new ForetagsAnnons
              {
-
+                 YrkestitelRefId = 4,
+                 OrtRefId = 5,
                  AnnonsURL = "www.lorumporum.se",
-
+                 RekryterareRefId = 4,
+                 MalsidaRefId = 1,
 
              }
 
 
           };
-            ForetagsAnnons.ForEach(c => context.ForetagsAnnonses.Add(c));
+            ForetagsAnnons.ForEach(c => context.ForetagsAnnonses.AddOrUpdate(c));
         }
     }
 }
