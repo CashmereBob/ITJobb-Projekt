@@ -17,6 +17,7 @@ namespace ITJobb.Models
         }
 
         public int AnnonsId { get; set; }
+        public DateTime PubliceringsDatum { get; set; }
 
         public int? YrkestitelRefId { get; set; }
         [ForeignKey("YrkestitelRefId")]

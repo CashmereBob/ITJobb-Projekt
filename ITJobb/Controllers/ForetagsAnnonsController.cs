@@ -51,7 +51,7 @@ namespace ITJobb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "AnnonsId,YrkestitelRefId,OrtRefId,AnnonsURL,MalsidaRefId,RekryterareRefId")] ForetagsAnnons foretagsAnnons)
+        public ActionResult Create([Bind(Include = "AnnonsId,PubliceringsDatum,YrkestitelRefId,OrtRefId,AnnonsURL,MalsidaRefId,RekryterareRefId")] ForetagsAnnons foretagsAnnons)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace ITJobb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "AnnonsId,YrkestitelRefId,OrtRefId,AnnonsURL,MalsidaRefId,RekryterareRefId")] ForetagsAnnons foretagsAnnons)
+        public ActionResult Edit([Bind(Include = "AnnonsId,PubliceringsDatum,YrkestitelRefId,OrtRefId,AnnonsURL,MalsidaRefId,RekryterareRefId")] ForetagsAnnons foretagsAnnons)
         {
             if (ModelState.IsValid)
             {
