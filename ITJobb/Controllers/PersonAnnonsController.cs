@@ -28,7 +28,7 @@ namespace ITJobb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PersonAnnons personAnnons = db.PersonAnnonses.Find(id);
+            PersonAnnons personAnnons = db.Annonses.Find(id) as PersonAnnons;
             if (personAnnons == null)
             {
                 return HttpNotFound();
@@ -50,7 +50,7 @@ namespace ITJobb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "AnnonsId,YrkestitelRefId,OrtRefId,Titel,Beskrivning,AnvandareRefId")] PersonAnnons personAnnons)
+        public ActionResult Create([Bind(Include = "AnnonsId,PubliceringsDatum,YrkestitelRefId,OrtRefId,Titel,Beskrivning,AnvandareRefId")] PersonAnnons personAnnons)
         {
             if (ModelState.IsValid)
             {
@@ -72,7 +72,7 @@ namespace ITJobb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PersonAnnons personAnnons = db.PersonAnnonses.Find(id);
+            PersonAnnons personAnnons = db.Annonses.Find(id) as PersonAnnons;
             if (personAnnons == null)
             {
                 return HttpNotFound();
@@ -88,7 +88,7 @@ namespace ITJobb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "AnnonsId,YrkestitelRefId,OrtRefId,Titel,Beskrivning,AnvandareRefId")] PersonAnnons personAnnons)
+        public ActionResult Edit([Bind(Include = "AnnonsId,PubliceringsDatum,YrkestitelRefId,OrtRefId,Titel,Beskrivning,AnvandareRefId")] PersonAnnons personAnnons)
         {
             if (ModelState.IsValid)
             {
@@ -109,7 +109,7 @@ namespace ITJobb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PersonAnnons personAnnons = db.PersonAnnonses.Find(id);
+            PersonAnnons personAnnons = db.Annonses.Find(id) as PersonAnnons;
             if (personAnnons == null)
             {
                 return HttpNotFound();
@@ -122,7 +122,7 @@ namespace ITJobb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            PersonAnnons personAnnons = db.PersonAnnonses.Find(id);
+            PersonAnnons personAnnons = db.Annonses.Find(id) as PersonAnnons;
             db.Annonses.Remove(personAnnons);
             db.SaveChanges();
             return RedirectToAction("Index");

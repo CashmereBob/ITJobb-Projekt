@@ -319,9 +319,8 @@ namespace ITJobb.Models
                  OrtRefId = 2,
                  Titel = "Jobb i Helsingborg",
                  Beskrivning = "Lorum Porum",
-                 AnvandareRefId = 2
-
-
+                 AnvandareRefId = 2,
+                 PubliceringsDatum = new DateTime(2016, 03, 22)
 
              },
              new PersonAnnons
@@ -330,9 +329,8 @@ namespace ITJobb.Models
                  OrtRefId = 2,
                  Titel = "Jobb?",
                  Beskrivning = "Lorum Porum",
-                 AnvandareRefId = 2
-
-
+                 AnvandareRefId = 2,
+                 PubliceringsDatum = new DateTime(2016, 03, 23)
 
              },
              new PersonAnnons
@@ -341,9 +339,8 @@ namespace ITJobb.Models
                  OrtRefId = 3,
                  Titel = "Söker arbete som systemutvecklare!",
                  Beskrivning = "Lorum Porum",
-                 AnvandareRefId = 3
-
-
+                 AnvandareRefId = 3,
+                 PubliceringsDatum = new DateTime(2016, 03, 24)
 
              },
              new PersonAnnons
@@ -352,9 +349,8 @@ namespace ITJobb.Models
                  OrtRefId = 4,
                  Titel = "Ett Jobb till mig?",
                  Beskrivning = "Lorum Porum",
-                 AnvandareRefId = 4
-
-
+                 AnvandareRefId = 4,
+                 PubliceringsDatum = new DateTime(2016, 03, 25)
 
              },
              new PersonAnnons
@@ -363,9 +359,8 @@ namespace ITJobb.Models
                  OrtRefId = 5,
                  Titel = "Jag Söker Jobb",
                  Beskrivning = "Lorum Porum",
-                 AnvandareRefId = 5
-
-
+                 AnvandareRefId = 5,
+                 PubliceringsDatum = new DateTime(2016, 03, 26)
 
              }
 
@@ -382,7 +377,8 @@ namespace ITJobb.Models
                  OrtRefId = 1,
                  AnnonsURL = "www.lorumporum.se",
                  RekryterareRefId = 1,
-                 MalsidaRefId = 4
+                 MalsidaRefId = 4,
+                 PubliceringsDatum = new DateTime(2016, 03, 18)
 
              },
              new ForetagsAnnons
@@ -391,7 +387,8 @@ namespace ITJobb.Models
                  OrtRefId = 2,
                  AnnonsURL = "www.lorumporum.se",
                  RekryterareRefId = 2,
-                 MalsidaRefId = 4
+                 MalsidaRefId = 4,
+                 PubliceringsDatum = new DateTime(2016, 03, 19)
 
              },
              new ForetagsAnnons
@@ -400,7 +397,8 @@ namespace ITJobb.Models
                  OrtRefId = 3,
                  AnnonsURL = "www.lorumporum.se",
                  RekryterareRefId = 3,
-                 MalsidaRefId = 3
+                 MalsidaRefId = 3,
+                 PubliceringsDatum = new DateTime(2016, 03, 20)
 
              },
              new ForetagsAnnons
@@ -409,7 +407,8 @@ namespace ITJobb.Models
                  OrtRefId = 4,
                  AnnonsURL = "www.lorumporum.se",
                  RekryterareRefId = 4,
-                 MalsidaRefId = 2
+                 MalsidaRefId = 2,
+                 PubliceringsDatum = new DateTime(2016, 03, 21)
 
              },
              new ForetagsAnnons
@@ -419,6 +418,7 @@ namespace ITJobb.Models
                  AnnonsURL = "www.lorumporum.se",
                  RekryterareRefId = 4,
                  MalsidaRefId = 1,
+                 PubliceringsDatum = new DateTime(2016, 03, 22)
 
              }
 
