@@ -14,9 +14,12 @@ namespace ITJobb
     {
         protected void Application_Start()
         {
-            //Database.SetInitializer<OrderingContext>(new DropCreateDatabaseIfModelChanges<OrderingContext>());
+            //Database.SetInitializer<ITJobbDbContext>(new DropCreateDatabaseIfModelChanges<ITJobbDbContext>());
 
-            Database.SetInitializer<ITJobbDbContext>(new AnvandareInitiallizer());
+            //Database.SetInitializer<ITJobbDbContext>(new AnvandareInitiallizer());
+
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<ITJobb.Models.ITJobbDbContext, ITJobb.Migrations.Configuration>());
+
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
