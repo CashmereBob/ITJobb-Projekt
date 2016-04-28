@@ -11,6 +11,7 @@ namespace ITJobb.Models
     public class PersonAnnons : Annons
     {
         public string Titel { get; set; }
+        
         public string Beskrivning { get; set; }
 
         public int? AnvandareRefId { get; set; }
