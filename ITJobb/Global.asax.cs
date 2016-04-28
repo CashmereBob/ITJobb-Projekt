@@ -16,9 +16,9 @@ namespace ITJobb
         {
             //Database.SetInitializer<ITJobbDbContext>(new DropCreateDatabaseIfModelChanges<ITJobbDbContext>());
 
-           // Database.SetInitializer<ITJobbDbContext>(new AnvandareInitiallizer());
-
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<ITJobb.Models.ITJobbDbContext, ITJobb.Migrations.Configuration>());
+
+            Database.SetInitializer<ITJobbDbContext>(new AnvandareInitiallizer());
 
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
