@@ -13,16 +13,15 @@ namespace ITJobb.Models
         {
             List<Anvandare> Anvandares = new List<Anvandare>();
 
-
-             var anvandare1 = new Anvandare
-             {
-                 ForNamn = "Gad",
-                 EfterNamn = "Job",
-                 TelefonNummer = "EC Utbildning",
-                 MailAdress = "Jab@hotmail.com",
-                 CVURL = "1234567890",
-                 PersonligtBrevURL = "URL",
-             };
+            var anvandare1 = new Anvandare
+            {
+                ForNamn = "Gad",
+                EfterNamn = "Job",
+                TelefonNummer = "EC Utbildning",
+                MailAdress = "Jab@hotmail.com",
+                CVURL = "1234567890",
+                PersonligtBrevURL = "URL",
+            };
 
             Anvandares.Add(anvandare1);
 
@@ -147,11 +146,11 @@ namespace ITJobb.Models
 
             List<Ort> Ort = new List<Ort>
             {
-                
+
             new Ort
              {
                  OrtNamn = "Helsingborg",
-                
+
              },
              new Ort
              {
@@ -202,7 +201,7 @@ namespace ITJobb.Models
           };
             Ort.ForEach(c => context.Orts.AddOrUpdate(c));
 
-    
+
             List<Malsida> Malsida = new List<Malsida>
             {
 
@@ -230,7 +229,7 @@ namespace ITJobb.Models
                  MalsidaUrl = "www.jobbsafari.se"
 
              }
-            
+
 
           };
             Malsida.ForEach(c => context.Malsidas.AddOrUpdate(c));
@@ -239,34 +238,34 @@ namespace ITJobb.Models
 
 
             var tag1 = new Tag
-             {
-                 TagNamn = ".NET"
+            {
+                TagNamn = ".NET"
 
-             };
+            };
 
             Tag.Add(tag1);
 
             var tag2 = new Tag
-             {
-                 TagNamn = "C#"
+            {
+                TagNamn = "C#"
 
-             };
+            };
 
             Tag.Add(tag2);
 
             var tag3 = new Tag
-             {
-                 TagNamn = "ASP.NET"
+            {
+                TagNamn = "ASP.NET"
 
-             };
+            };
 
             Tag.Add(tag3);
 
             var tag4 = new Tag
-             {
-                 TagNamn = "T-SQL"
+            {
+                TagNamn = "T-SQL"
 
-             };
+            };
 
             Tag.Add(tag4);
 
@@ -291,7 +290,7 @@ namespace ITJobb.Models
              {
                  YrkesNamn = "Driftingenjör",
                  MedelLon = 30000
-                 
+
 
              },
              new YrkesTitel
@@ -300,7 +299,7 @@ namespace ITJobb.Models
                  MedelLon = 25000
 
              }
-            
+
 
           };
             YrkesTitel.ForEach(c => context.Yrkestitels.AddOrUpdate(c));
@@ -359,61 +358,60 @@ namespace ITJobb.Models
             PersonAnnons.Add(personannons1);
 
             var personannons2 = new PersonAnnons
-             {
-                 YrkestitelRefId = 1,
-                 OrtRefId = 2,
-                 Titel = "Jobb?",
-                 Beskrivning = "Lorum Porum",
-                 AnvandareRefId = 2,
-                 PubliceringsDatum = new DateTime(2016, 03, 23)
+            {
+                YrkestitelRefId = 1,
+                OrtRefId = 2,
+                Titel = "Jobb?",
+                Beskrivning = "Lorum Porum",
+                AnvandareRefId = 2,
+                PubliceringsDatum = new DateTime(2016, 03, 23)
 
-             };
+            };
 
             PersonAnnons.Add(personannons2);
 
             var personannons3 = new PersonAnnons
-             {
-                 YrkestitelRefId = 2,
-                 OrtRefId = 3,
-                 Titel = "Söker arbete som systemutvecklare!",
-                 Beskrivning = "Lorum Porum",
-                 AnvandareRefId = 3,
-                 PubliceringsDatum = new DateTime(2016, 03, 24)
+            {
+                YrkestitelRefId = 2,
+                OrtRefId = 3,
+                Titel = "Söker arbete som systemutvecklare!",
+                Beskrivning = "Lorum Porum",
+                AnvandareRefId = 3,
+                PubliceringsDatum = new DateTime(2016, 03, 24)
 
-             };
+            };
 
             PersonAnnons.Add(personannons3);
 
             var personannons4 = new PersonAnnons
-             {
-                 YrkestitelRefId = 3,
-                 OrtRefId = 4,
-                 Titel = "Ett Jobb till mig?",
-                 Beskrivning = "Lorum Porum",
-                 AnvandareRefId = 4,
-                 PubliceringsDatum = new DateTime(2016, 03, 25)
+            {
+                YrkestitelRefId = 3,
+                OrtRefId = 4,
+                Titel = "Ett Jobb till mig?",
+                Beskrivning = "Lorum Porum",
+                AnvandareRefId = 4,
+                PubliceringsDatum = new DateTime(2016, 03, 25)
 
-             };
+            };
 
             PersonAnnons.Add(personannons4);
 
             var personannons5 = new PersonAnnons
-             {
-                 YrkestitelRefId = 4,
-                 OrtRefId = 5,
-                 Titel = "Jag Söker Jobb",
-                 Beskrivning = "Lorum Porum",
-                 AnvandareRefId = 5,
-                 PubliceringsDatum = new DateTime(2016, 03, 26)
+            {
+                YrkestitelRefId = 4,
+                OrtRefId = 5,
+                Titel = "Jag Söker Jobb",
+                Beskrivning = "Lorum Porum",
+                AnvandareRefId = 5,
+                PubliceringsDatum = new DateTime(2016, 03, 26)
 
-             };
+            };
 
             PersonAnnons.Add(personannons5);
 
             PersonAnnons.ForEach(c => context.PersonAnnonses.AddOrUpdate(c));
 
             List<ForetagsAnnons> ForetagsAnnons = new List<ForetagsAnnons>();
-
 
             var foretagsannons1 = new ForetagsAnnons
             {
@@ -429,54 +427,54 @@ namespace ITJobb.Models
             ForetagsAnnons.Add(foretagsannons1);
 
             var foretagsannons2 = new ForetagsAnnons
-             {
-                 YrkestitelRefId = 1,
-                 OrtRefId = 2,
-                 AnnonsURL = "www.lorumporum.se",
-                 RekryterareRefId = 2,
-                 MalsidaRefId = 4,
-                 PubliceringsDatum = new DateTime(2016, 03, 19)
+            {
+                YrkestitelRefId = 1,
+                OrtRefId = 2,
+                AnnonsURL = "www.lorumporum.se",
+                RekryterareRefId = 2,
+                MalsidaRefId = 4,
+                PubliceringsDatum = new DateTime(2016, 03, 19)
 
-             };
+            };
 
             ForetagsAnnons.Add(foretagsannons2);
 
             var foretagsannons3 = new ForetagsAnnons
-             {
-                 YrkestitelRefId = 2,
-                 OrtRefId = 3,
-                 AnnonsURL = "www.lorumporum.se",
-                 RekryterareRefId = 3,
-                 MalsidaRefId = 3,
-                 PubliceringsDatum = new DateTime(2016, 03, 20)
+            {
+                YrkestitelRefId = 2,
+                OrtRefId = 3,
+                AnnonsURL = "www.lorumporum.se",
+                RekryterareRefId = 3,
+                MalsidaRefId = 3,
+                PubliceringsDatum = new DateTime(2016, 03, 20)
 
-             };
+            };
 
             ForetagsAnnons.Add(foretagsannons3);
 
             var foretagsannons4 = new ForetagsAnnons
-             {
-                 YrkestitelRefId = 3,
-                 OrtRefId = 4,
-                 AnnonsURL = "www.lorumporum.se",
-                 RekryterareRefId = 4,
-                 MalsidaRefId = 2,
-                 PubliceringsDatum = new DateTime(2016, 03, 21)
+            {
+                YrkestitelRefId = 3,
+                OrtRefId = 4,
+                AnnonsURL = "www.lorumporum.se",
+                RekryterareRefId = 4,
+                MalsidaRefId = 2,
+                PubliceringsDatum = new DateTime(2016, 03, 21)
 
-             };
+            };
 
             ForetagsAnnons.Add(foretagsannons4);
 
             var foretagsannons5 = new ForetagsAnnons
-             {
-                 YrkestitelRefId = 4,
-                 OrtRefId = 5,
-                 AnnonsURL = "www.lorumporum.se",
-                 RekryterareRefId = 4,
-                 MalsidaRefId = 1,
-                 PubliceringsDatum = new DateTime(2016, 03, 22)
+            {
+                YrkestitelRefId = 4,
+                OrtRefId = 5,
+                AnnonsURL = "www.lorumporum.se",
+                RekryterareRefId = 4,
+                MalsidaRefId = 1,
+                PubliceringsDatum = new DateTime(2016, 03, 22)
 
-             };
+            };
 
             ForetagsAnnons.Add(foretagsannons5);
 
@@ -520,6 +518,8 @@ namespace ITJobb.Models
             foretagsannons4.Tags.Add(tag4);
             foretagsannons5.Tags.Add(tag4);
             foretagsannons5.Tags.Add(tag3);
+
+            context.SaveChanges();
         }
     }
 }
