@@ -165,6 +165,7 @@
     <Compile Include="Controllers\OrtsController.cs" />
     <Compile Include="Controllers\PersonAnnonsController.cs" />
     <Compile Include="Controllers\RekryteraresController.cs" />
+    <Compile Include="Controllers\SQLfragorController.cs" />
     <Compile Include="Controllers\TagsController.cs" />
     <Compile Include="Controllers\YrkesTitelsController.cs" />
     <Compile Include="Global.asax.cs">
@@ -183,18 +184,36 @@
     <Compile Include="Models\Tag.cs" />
     <Compile Include="Models\YrkesTitel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebForm1.aspx.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForm1.aspx.designer.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\lightbox.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\itjobb-Classer.png" />
+    <Content Include="Images\itjobb-mindmap.png" />
+    <Content Include="img\close.png" />
+    <Content Include="img\loading.gif" />
+    <Content Include="img\next.png" />
+    <Content Include="img\prev.png" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="sass\_variables.sass" />
+    <Content Include="sass\screen.sass" />
+    <Content Include="sass\lightbox.sass" />
+    <Content Include="WebForm1.aspx" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -203,6 +222,8 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\lightbox-2.6.js" />
+    <Content Include="Scripts\lightbox-2.6.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -276,6 +297,7 @@
     <Content Include="Views\Malsidas\Details.cshtml" />
     <Content Include="Views\Malsidas\Edit.cshtml" />
     <Content Include="Views\Malsidas\Index.cshtml" />
+    <Content Include="Views\SQLfragor\index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

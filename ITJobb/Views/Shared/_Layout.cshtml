@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - IT-Jobb </title>
+    <link href="~/Content/lightbox.css" rel="stylesheet">
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -20,14 +21,31 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul id="nav" class="nav navbar-nav">
-                    <li>@Html.ActionLink("Användare", "Index", "Anvandares")</li>
-                            <li>@Html.ActionLink("PersonAnnons", "Index", "PersonAnnons")</li>
-                            <li>@Html.ActionLink("FöretagsAnnons", "Index", "ForetagsAnnons")</li>
-                            <li>@Html.ActionLink("Rekryterare", "Index", "Rekryterares")</li>
-                            <li>@Html.ActionLink("Ort", "Index", "Orts")</li>
-                            <li>@Html.ActionLink("Tag", "Index", "Tags")</li>
-                            <li>@Html.ActionLink("Målsida", "Index", "Malsidas")</li>
-                            <li>@Html.ActionLink("Yrkestitel", "Index", "YrkesTitels")</li>
+                    <li role="presentation" class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
+                            Presentation <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("SQL Frågor", "Index", "SQLfragor")</li>
+                            <li>@Html.ActionLink("Projektrapport", "Index", "#")</li>
+                            <li>@Html.ActionLink("Mötesprotokoll", "Index", "#")</li>                                                    
+                        </ul>
+                    </li>
+                   
+                                <li role="presentation" class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
+                                        CRUD n Seed <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("PersonAnnons", "Index", "PersonAnnons")</li>
+                                        <li>@Html.ActionLink("FöretagsAnnons", "Index", "ForetagsAnnons")</li>
+                                        <li>@Html.ActionLink("Rekryterare", "Index", "Rekryterares")</li>
+                                        <li>@Html.ActionLink("Ort", "Index", "Orts")</li>
+                                        <li>@Html.ActionLink("Tag", "Index", "Tags")</li>
+                                        <li>@Html.ActionLink("Målsida", "Index", "Malsidas")</li>
+                                        <li>@Html.ActionLink("Yrkestitel", "Index", "YrkesTitels")</li>
+                                    </ul>
+                                </li>
                 </ul>
             </div>
         </div>
@@ -43,5 +61,6 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    <script src="~/Scripts/lightbox-2.6.js"></script>
 </body>
 </html>
