@@ -1,0 +1,387 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<br />
+<div class="row">
+    <pre>
+USE ITJobbDB
+GO
+
+--Trigger För Att skicka notifikationer om företagsannons matchar personannons
+CREATE TRIGGER trEmailMatch  -- namn på trigger
+ON TagAnnons -- Vilken table triggern ska vara på
+FOR INSERT -- Triggern aktiveras när något sätts in i tablen
+AS
+BEGIN
+	BEGIN TRY -- sätter igång en try catch
+	BEGIN TRANSACTION -- Sätter igång transaktion
+	DECLARE &#64Tag INT --allokerar minne för variabler
+	DECLARE &#64ID INT
+	DECLARE &#64Adress NVARCHAR(MAX)
+	DECLARE &#64FöretagsAnnons NVARCHAR(MAX)
+	DECLARE &#64AnnonsURL NVARCHAR(MAX)
+	SELECT &#64Tag = Tag_TagId FROM inserted --tilldelar variabel id på taggen som sätts in i tabellen
+	SELECT &#64ID = Annons_AnnonsId FROM inserted --tilldelar variabel id på annonsen som sätts in i tabellen
+	SET &#64FöretagsAnnons = (SELECT Discriminator FROM Annons WHERE AnnonsId = &#64ID) -- Tilldelar discriminator 
+	SET &#64AnnonsURL = (SELECT AnnonsURL FROM Annons WHERE AnnonsId = &#64ID) -- tilldelar annonsURL 
+	IF (&#64FöretagsAnnons = 'ForetagsAnnons') --Kontrollerar om annonsen är en företagsannons
+		BEGIN
+		DECLARE Epost CURSOR FOR --alokerar en cursor för att loopa genom table nedan.
+		SELECT Anvandares.MailAdress --Table som samlar mailadresser på användare som har personAnnonser med taggar som matchar Företagsannonsen
+		FROM Tags, TagAnnons, Annons
+			INNER JOIN Anvandares
+			ON Annons.AnvandareRefId = Anvandares.AnvandareId
+		WHERE Discriminator = 'PersonAnnons' 
+		AND TagAnnons.Annons_AnnonsId = Annons.AnnonsId 
+		AND TagAnnons.Tag_TagId = Tags.TagId
+		AND TagId = &#64Tag
+				OPEN Epost --Öppnar Cursorn
+				FETCH NEXT FROM Epost INTO &#64Adress -- kollar första raden
+				WHILE(&#64&#64FETCH_STATUS = 0) --Om status är noll finns där fler rader
+				BEGIN
+						
+					PRINT 'Skickar notefikation till ' + &#64Adress + ' rörande match på taggar i annons: ' + &#64AnnonsURL --Skickar notifikation
+					FETCH NEXT FROM Epost INTO &#64Adress --går till nästa rad
+				END
+		
+		
+				CLOSE Epost --stänger cursorn
+				DEALLOCATE Epost --dealokerar cursorn
+				COMMIT TRANSACTION
+		END
+	ELSE
+		BEGIN
+			ROLLBACK TRANSACTION --Om inte företagsannons rollback
+		END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION --Om något går fel rollback
+	END CATCH;
+END
+GO
+
+--Funktion som skriver ut hela nmanet på en user
+CREATE FUNCTION fnHelaNamnet (&#64ID INT)
+RETURNS NVARCHAR(MAX)
+AS
+BEGIN
+	
+	DECLARE &#64Namn NVARCHAR(MAX)
+	SET &#64Namn = ( SELECT CONCAT(ForNamn, + ' ' + EfterNamn) FROM Anvandares WHERE AnvandareId = &#64ID) --&#64ID
+	RETURN &#64Namn
+END
+GO
+
+--Lista vilka rekryterare / arbetsgivare som finns bland IT-Jobben och hur många jobb varje företag erbjuder.
+CREATE PROC spAntalJobbPerArbetsgivare
+AS
+BEGIN
+SELECT COUNT(*) AS "Antal Jobb",ForetagsNamn,AnnonsURL
+FROM Annons INNER JOIN Rekryterares ON Annons.RekryterareRefId=Rekryterares.RekryterareId
+GROUP BY ForetagsNamn,AnnonsURL;
+END
+GO
+
+----Lista jobb efter sök på Yrke.
+CREATE PROC spSoekYrke (&#64Yrkesnamn NVARCHAR(50))
+AS
+BEGIN
+SELECT AnnonsURL, YrkesNamn
+FROM Annons INNER JOIN YrkesTitels ON Annons.YrkestitelRefId=YrkesTitels.YrkesTitelId 
+WHERE AnnonsURL IS NOT NULL AND YrkesNamn LIKE '%' + &#64Yrkesnamn + '%';
+END
+GO
+----Lista CV
+CREATE PROC spListaCV (&#64AnvändarID INT)
+AS
+BEGIN
+SELECT dbo.fnHelaNamnet(&#64AnvändarID) AS "Namn",CVURL --TODO lägg in funktion.
+FROM Anvandares
+WHERE AnvandareId = &#64AnvändarID;
+END
+GO
+
+-- Listar målsidor samt mängd med annonser
+CREATE PROC spMålsida
+AS
+BEGIN
+SELECT Malsidas.MalsidaNamn AS "Jobbsida", COUNT(*) AS "Antal Jobb"
+FROM Annons
+	INNER JOIN Malsidas
+	ON annons.MalsidaRefId = Malsidas.MalsidaId
+GROUP BY MalsidaNamn;
+END
+GO
+
+-- Listar alla FöretagsAnnonser baserat på Rekryteraren
+CREATE PROC spSokForetagsAnnonser(&#64Rekryterare NVARCHAR(MAX))
+AS
+BEGIN
+SELECT PubliceringsDatum AS "Publicerades", YrkesNamn AS "Jobb Titel", OrtNamn AS "Ort", ForetagsNamn As "Rekryterare"
+FROM Annons
+	INNER JOIN Rekryterares
+	ON Annons.MalsidaRefId = Rekryterares.RekryterareId
+	INNER JOIN YrkesTitels
+	ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
+	INNER JOIN Orts
+	ON Annons.OrtRefId = Orts.OrtId
+WHERE ForetagsNamn LIKE '%' + &#64Rekryterare + '%' --Fyll i sökord här
+ORDER BY PubliceringsDatum;
+END
+GO
+
+-- Listar samtliga jobb som inloggad användare sökt
+CREATE PROC spSokSoktaJobb(&#64ID NVARCHAR(MAX))
+AS
+BEGIN
+SELECT YrkesNamn AS "Jobb Titel", OrtNamn AS "Ort", YrkesTitels.MedelLon AS "Medellön", ForetagsNamn As "Rekryterare", Rekryterares.MailAdress AS "Kontakt Adress", PubliceringsDatum AS "Publicerades"
+FROM AnvandareForetagsAnnons, Anvandares, Annons
+	INNER JOIN Rekryterares
+	ON Annons.MalsidaRefId = Rekryterares.RekryterareId
+	INNER JOIN YrkesTitels
+	ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
+	INNER JOIN Orts
+	ON Annons.OrtRefId = Orts.OrtId
+WHERE AnvandareForetagsAnnons.Anvandare_AnvandareId = Anvandares.AnvandareId AND AnvandareForetagsAnnons.ForetagsAnnons_AnnonsId = Annons.AnnonsId
+	AND Anvandares.AnvandareId = &#64ID --Fyll i inloggad ID här
+ORDER BY PubliceringsDatum
+END
+GO
+	
+--Listar alla FöretagsAnnonser som Matchar inloggad användares personAnnonser baserat på taggar.
+CREATE PROC spTagMatch(&#64ID NVARCHAR(MAX))
+AS
+BEGIN
+DECLARE &#64Tag NVARCHAR(MAX)
+DECLARE &#64Result TABLE(Publicerades Date, YrkesNamn NVARCHAR(MAX), Medellön Money, Ort NVARCHAR(MAX), Rekryterare NVARCHAR(MAX), [Tag Träff] NVARCHAR(MAX))
+DECLARE Taggar CURSOR FOR SELECT TagNamn
+FROM tags, TagAnnons, Annons
+WHERE TagAnnons.Annons_AnnonsId = Annons.AnnonsId AND TagAnnons.Tag_TagId = Tags.TagId
+AND annons.Discriminator = 'PersonAnnons'
+AND Annons.AnvandareRefId = &#64ID --Fyll i inloggad ID här
+OPEN Taggar
+FETCH NEXT FROM Taggar INTO &#64Tag
+WHILE(&#64&#64FETCH_STATUS = 0)
+BEGIN
+INSERT INTO &#64Result
+SELECT PubliceringsDatum, YrkesNamn, MedelLon, OrtNamn, ForetagsNamn, Tags.TagNamn
+FROM 
+	tags, TagAnnons, Annons 
+	INNER JOIN Rekryterares
+	ON Annons.MalsidaRefId = Rekryterares.RekryterareId
+	INNER JOIN YrkesTitels
+	ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
+	INNER JOIN Orts
+	ON Annons.OrtRefId = Orts.OrtId
+WHERE TagAnnons.Annons_AnnonsId = Annons.AnnonsId AND TagAnnons.Tag_TagId = Tags.TagId
+AND annons.Discriminator = 'ForetagsAnnons' AND
+Tags.TagNamn = &#64Tag
+FETCH NEXT FROM Taggar INTO &#64Tag
+END	
+CLOSE Taggar
+DEALLOCATE Taggar
+SELECT *
+FROM &#64Result
+END
+GO
+
+--Lista vilka olika Yrkestitlar som finns tillgängligt bland IT-Jobben och hur många av varje Yrke
+CREATE PROC spYrkestitlar
+AS
+BEGIN
+SELECT YrkesNamn AS "JobName", COUNT(*) AS "Job Amount"
+FROM Annons
+    INNER JOIN YrkesTitels
+    ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
+GROUP BY YrkesNamn;
+END
+GO
+
+--Lista jobb efter sök på sidor (sök på en sida och få upp vilka jobb som finns på den sidan)
+CREATE PROC spMalsidor (&#64malsida NVARCHAR(MAX))
+AS
+BEGIN
+SELECT MalsidaNamn AS 'Site Name', YrkesNamn AS 'Work Title'
+FROM Annons
+    INNER JOIN Malsidas
+    ON Annons.MalsidaRefId = Malsidas.MalsidaId
+    INNER JOIN YrkesTitels
+    ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
+WHERE MalsidaNamn LIKE '%'+&#64malsida+'%'; --Skriv in själva jobsiten inom fnuttarna
+END
+GO
+
+--Registering av användare
+CREATE PROC spLäggAnvändare (&#64Fnamn NVARCHAR(MAX), &#64Enamn NVARCHAR(MAX), &#64Telefon NVARCHAR(MAX) = null, &#64Mail NVARCHAR(MAX), &#64CV NVARCHAR(MAX)=null, &#64Pb NVARCHAR(MAX)=null)
+AS
+BEGIN
+BEGIN TRY
+BEGIN TRANSACTION
+	INSERT INTO Anvandares VALUES (&#64Fnamn, &#64Enamn, &#64Telefon, &#64Mail, &#64Cv, &#64Pb)
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	PRINT 'Coudnt add user'
+	ROLLBACK TRANSACTION
+END CATCH
+END
+GO
+
+--Lista Personliga brev
+CREATE PROC spListaPB (&#64ID INT)
+AS
+BEGIN
+SELECT dbo.fnHelaNamnet(&#64ID) AS 'Name', PersonligtBrevURL AS 'Personal Letter'
+FROM Anvandares
+WHERE AnvandareId = &#64ID
+END
+GO
+
+--Lista vilka orter som finns repressenterade bland IT-Jobben och hur många jobb på varje Ort.
+CREATE PROC spOrter
+AS
+BEGIN
+SELECT Orts.OrtNamn, count(*) AS "total jobb"
+FROM Annons JOIN Orts ON annons.OrtRefId = orts.OrtId
+GROUP BY Orts.OrtNamn
+END
+GO
+
+--Lista jobb efter sök på ort.
+CREATE PROC spSokOrt (&#64ort NVARCHAR(MAX))
+AS
+BEGIN
+SELECT Orts.OrtNamn AS "ort", YrkesTitels.YrkesNamn AS "yrke"
+FROM annons JOIN Orts ON Annons.OrtRefId = orts.OrtId
+JOIN YrkesTitels ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
+WHERE Orts.OrtNamn LIKE '%' + &#64ort + '%'
+END
+GO
+
+--Tabort användare
+CREATE PROC spRaderaAnvandare (&#64ID INT)
+AS
+BEGIN
+BEGIN TRY
+BEGIN TRANSACTION
+	DELETE FROM AnvandareForetagsAnnons WHERE Anvandare_AnvandareId = &#64ID
+	DELETE FROM Anvandares WHERE AnvandareId = &#64ID
+	
+COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+PRINT 'Could not remove user'
+ROLLBACK TRANSACTION
+END CATCH
+END
+GO
+
+--Lista annonser efter frisök som matchar yrke eller träff i annonstitel.
+CREATE PROC spFriSok (&#64sok NVARCHAR(MAX))
+AS
+BEGIN
+SELECT PubliceringsDatum AS "Publicerades", YrkesNamn AS "Jobb Titel", OrtNamn AS "Ort", ForetagsNamn As "Rekryterare"
+FROM Annons
+	INNER JOIN Rekryterares
+	ON Annons.MalsidaRefId = Rekryterares.RekryterareId
+	INNER JOIN YrkesTitels
+	ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
+	INNER JOIN Orts
+	ON Annons.OrtRefId = Orts.OrtId
+WHERE YrkesTitels.YrkesNamn LIKE '%' + &#64sok + '%' OR Annons.Titel LIKE '%' + &#64sok + '%' --Fyll i sökord här
+ORDER BY PubliceringsDatum
+END
+GO
+
+--Ta bort annons
+CREATE PROC spTaBortPersonAnnons (&#64AnnonsID INT, &#64AnvandareID INT)
+AS
+BEGIN
+BEGIN TRY
+BEGIN TRANSACTION
+DECLARE &#64AnvandareAnnons INT
+SET &#64AnvandareAnnons = (SELECT AnvandareRefId FROM Annons WHERE AnnonsId = &#64AnnonsID) 
+IF (&#64AnvandareAnnons = &#64AnvandareID)
+	BEGIN
+		DELETE FROM TagAnnons WHERE Annons_AnnonsId = &#64AnnonsID
+		DELETE FROM Annons WHERE AnnonsId = &#64AnnonsID
+		COMMIT TRANSACTION
+	END
+ELSE
+	BEGIN
+		PRINT 'User missing permission to delete this post'
+		ROLLBACK TRANSACTION
+	END
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+END
+GO
+
+--Lägg in personligt brev
+CREATE PROC spLäggTillPersonligtBrev (&#64URL NVARCHAR(MAX), &#64AnvandareID INT)
+AS
+BEGIN
+BEGIN TRY
+BEGIN TRANSACTION
+	UPDATE Anvandares SET PersonligtBrevURL = &#64URL WHERE AnvandareId = &#64AnvandareID
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+END
+GO
+
+--Lista jobb efter lön, visa yrkestitel, ort.
+CREATE PROC spSaleryInquiery
+AS
+BEGIN
+	SELECT
+		PubliceringsDatum AS "Publicerades",
+		YrkesTitels.YrkesNamn AS "Tjänst",
+		YrkesTitels.MedelLon AS "Genomsnittslön",
+		OrtNamn AS "Ort"
+	FROM
+		Annons
+		INNER JOIN Orts
+		ON Annons.OrtRefId = Orts.OrtId
+		INNER JOIN YrkesTitels
+		ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
+	WHERE Annons.Discriminator = 'ForetagsAnnons'
+	ORDER BY 
+		MedelLon DESC
+END
+GO
+
+--Skapa Annons.
+CREATE PROC spAddJobAd (&#64Titel NVARCHAR(MAX) ,&#64Beskrivning NVARCHAR(MAX) ,&#64YrkesTitel INT ,&#64OrtID INT ,&#64TagID INT ,&#64AnvID INT)
+AS
+BEGIN
+BEGIN TRY
+BEGIN TRANSACTION
+	INSERT INTO Annons VALUES (GETDATE(), &#64YrkesTitel, &#64OrtID, null, null, null, &#64Titel, &#64Beskrivning, &#64AnvID, 'PersonAnnons')
+	DECLARE &#64ID INT
+	SET &#64ID = (
+	SELECT MAX(AnnonsId)
+	FROM Annons
+	)
+	INSERT INTO TagAnnons VALUES (&#64TagID, &#64ID)
+COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+PRINT 'Kunde inte lägga till annons'
+ROLLBACK TRANSACTION
+END CATCH
+END
+
+    </pre>
+
+</div>
+
