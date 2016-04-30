@@ -90,6 +90,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Web.DataVisualization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -164,6 +165,7 @@
     <Compile Include="Controllers\MalsidasController.cs" />
     <Compile Include="Controllers\OrtsController.cs" />
     <Compile Include="Controllers\PersonAnnonsController.cs" />
+    <Compile Include="Controllers\QuerysController.cs" />
     <Compile Include="Controllers\RekryteraresController.cs" />
     <Compile Include="Controllers\SQLfragorController.cs" />
     <Compile Include="Controllers\TagsController.cs" />
@@ -201,6 +203,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\itjobb-Classer.png" />
+    <Content Include="Images\itjobb-diagram.png" />
     <Content Include="Images\itjobb-mindmap.png" />
     <Content Include="img\close.png" />
     <Content Include="img\loading.gif" />
@@ -298,9 +301,11 @@
     <Content Include="Views\Malsidas\Edit.cshtml" />
     <Content Include="Views\Malsidas\Index.cshtml" />
     <Content Include="Views\SQLfragor\index.cshtml" />
+    <Content Include="Views\Querys\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
