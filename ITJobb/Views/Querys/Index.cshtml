@@ -70,7 +70,6 @@ CREATE FUNCTION fnHelaNamnet (&#64ID INT)
 RETURNS NVARCHAR(MAX)
 AS
 BEGIN
-	
 	DECLARE &#64Namn NVARCHAR(MAX)
 	SET &#64Namn = ( SELECT CONCAT(ForNamn, + ' ' + EfterNamn) FROM Anvandares WHERE AnvandareId = &#64ID) --&#64ID
 	RETURN &#64Namn
@@ -81,9 +80,9 @@ GO
 CREATE PROC spAntalJobbPerArbetsgivare
 AS
 BEGIN
-SELECT COUNT(*) AS "Antal Jobb",ForetagsNamn,AnnonsURL
-FROM Annons INNER JOIN Rekryterares ON Annons.RekryterareRefId=Rekryterares.RekryterareId
-GROUP BY ForetagsNamn,AnnonsURL;
+    SELECT COUNT(*) AS "Antal",ForetagsNamn AS "Företag" , Rekryterares.RekryterareURL AS "Företags URL"
+    FROM Annons INNER JOIN Rekryterares ON Annons.RekryterareRefId=Rekryterares.RekryterareId
+    GROUP BY ForetagsNamn,Rekryterares.RekryterareURL;
 END
 GO
 
@@ -91,16 +90,17 @@ GO
 CREATE PROC spSoekYrke (&#64Yrkesnamn NVARCHAR(50))
 AS
 BEGIN
-SELECT AnnonsURL, YrkesNamn
+SELECT YrkesNamn AS "Titel", AnnonsURL AS "Annons URL"
 FROM Annons INNER JOIN YrkesTitels ON Annons.YrkestitelRefId=YrkesTitels.YrkesTitelId 
 WHERE AnnonsURL IS NOT NULL AND YrkesNamn LIKE '%' + &#64Yrkesnamn + '%';
 END
 GO
+
 ----Lista CV
 CREATE PROC spListaCV (&#64AnvändarID INT)
 AS
 BEGIN
-SELECT dbo.fnHelaNamnet(&#64AnvändarID) AS "Namn",CVURL --TODO lägg in funktion.
+SELECT dbo.fnHelaNamnet(&#64AnvändarID) AS "Namn", CVURL AS "CV URL"
 FROM Anvandares
 WHERE AnvandareId = &#64AnvändarID;
 END
@@ -110,7 +110,7 @@ GO
 CREATE PROC spMålsida
 AS
 BEGIN
-SELECT Malsidas.MalsidaNamn AS "Jobbsida", COUNT(*) AS "Antal Jobb"
+SELECT Malsidas.MalsidaNamn AS "Ursprungssida", COUNT(*) AS "Antal"
 FROM Annons
 	INNER JOIN Malsidas
 	ON annons.MalsidaRefId = Malsidas.MalsidaId
@@ -122,7 +122,7 @@ GO
 CREATE PROC spSokForetagsAnnonser(&#64Rekryterare NVARCHAR(MAX))
 AS
 BEGIN
-SELECT PubliceringsDatum AS "Publicerades", YrkesNamn AS "Jobb Titel", OrtNamn AS "Ort", ForetagsNamn As "Rekryterare"
+SELECT PubliceringsDatum AS "Publicerades", YrkesNamn AS "Titel", OrtNamn AS "Ort", ForetagsNamn As "Rekryterare"
 FROM Annons
 	INNER JOIN Rekryterares
 	ON Annons.MalsidaRefId = Rekryterares.RekryterareId
@@ -139,7 +139,7 @@ GO
 CREATE PROC spSokSoktaJobb(&#64ID NVARCHAR(MAX))
 AS
 BEGIN
-SELECT YrkesNamn AS "Jobb Titel", OrtNamn AS "Ort", YrkesTitels.MedelLon AS "Medellön", ForetagsNamn As "Rekryterare", Rekryterares.MailAdress AS "Kontakt Adress", PubliceringsDatum AS "Publicerades"
+SELECT YrkesNamn AS "Titel", OrtNamn AS "Ort", YrkesTitels.MedelLon AS "Medellön", ForetagsNamn As "Rekryterare", Rekryterares.MailAdress AS "Kontakt Adress", PubliceringsDatum AS "Publicerades"
 FROM AnvandareForetagsAnnons, Anvandares, Annons
 	INNER JOIN Rekryterares
 	ON Annons.MalsidaRefId = Rekryterares.RekryterareId
@@ -158,7 +158,7 @@ CREATE PROC spTagMatch(&#64ID NVARCHAR(MAX))
 AS
 BEGIN
 DECLARE &#64Tag NVARCHAR(MAX)
-DECLARE &#64Result TABLE(Publicerades Date, YrkesNamn NVARCHAR(MAX), Medellön Money, Ort NVARCHAR(MAX), Rekryterare NVARCHAR(MAX), [Tag Träff] NVARCHAR(MAX))
+DECLARE &#64Result TABLE(Publicerades Date, [Titel] NVARCHAR(MAX), Medellön Money, Ort NVARCHAR(MAX), Rekryterare NVARCHAR(MAX), [Tag Träff] NVARCHAR(MAX))
 DECLARE Taggar CURSOR FOR SELECT TagNamn
 FROM tags, TagAnnons, Annons
 WHERE TagAnnons.Annons_AnnonsId = Annons.AnnonsId AND TagAnnons.Tag_TagId = Tags.TagId
@@ -194,7 +194,7 @@ GO
 CREATE PROC spYrkestitlar
 AS
 BEGIN
-SELECT YrkesNamn AS "JobName", COUNT(*) AS "Job Amount"
+SELECT YrkesNamn AS "Titel", COUNT(*) AS "Antal"
 FROM Annons
     INNER JOIN YrkesTitels
     ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
@@ -206,7 +206,7 @@ GO
 CREATE PROC spMalsidor (&#64malsida NVARCHAR(MAX))
 AS
 BEGIN
-SELECT MalsidaNamn AS 'Site Name', YrkesNamn AS 'Work Title'
+SELECT MalsidaNamn AS 'Ursprungssida', YrkesNamn AS 'Titel', AnnonsURL AS "Annons URL"
 FROM Annons
     INNER JOIN Malsidas
     ON Annons.MalsidaRefId = Malsidas.MalsidaId
@@ -236,7 +236,7 @@ GO
 CREATE PROC spListaPB (&#64ID INT)
 AS
 BEGIN
-SELECT dbo.fnHelaNamnet(&#64ID) AS 'Name', PersonligtBrevURL AS 'Personal Letter'
+SELECT dbo.fnHelaNamnet(&#64ID) AS 'Namn', PersonligtBrevURL AS 'Personligtbrev URL'
 FROM Anvandares
 WHERE AnvandareId = &#64ID
 END
@@ -246,7 +246,7 @@ GO
 CREATE PROC spOrter
 AS
 BEGIN
-SELECT Orts.OrtNamn, count(*) AS "total jobb"
+SELECT Orts.OrtNamn AS "Ort", count(*) AS "Antal"
 FROM Annons JOIN Orts ON annons.OrtRefId = orts.OrtId
 GROUP BY Orts.OrtNamn
 END
@@ -256,7 +256,7 @@ GO
 CREATE PROC spSokOrt (&#64ort NVARCHAR(MAX))
 AS
 BEGIN
-SELECT Orts.OrtNamn AS "ort", YrkesTitels.YrkesNamn AS "yrke"
+SELECT Orts.OrtNamn AS "Ort", YrkesTitels.YrkesNamn AS "Titel"
 FROM annons JOIN Orts ON Annons.OrtRefId = orts.OrtId
 JOIN YrkesTitels ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
 WHERE Orts.OrtNamn LIKE '%' + &#64ort + '%'
@@ -285,7 +285,7 @@ GO
 CREATE PROC spFriSok (&#64sok NVARCHAR(MAX))
 AS
 BEGIN
-SELECT PubliceringsDatum AS "Publicerades", YrkesNamn AS "Jobb Titel", OrtNamn AS "Ort", ForetagsNamn As "Rekryterare"
+SELECT PubliceringsDatum AS "Publicerades", YrkesNamn AS "Titel", OrtNamn AS "Ort", ForetagsNamn As "Rekryterare"
 FROM Annons
 	INNER JOIN Rekryterares
 	ON Annons.MalsidaRefId = Rekryterares.RekryterareId
@@ -345,7 +345,7 @@ AS
 BEGIN
 	SELECT
 		PubliceringsDatum AS "Publicerades",
-		YrkesTitels.YrkesNamn AS "Tjänst",
+		YrkesTitels.YrkesNamn AS "Titel",
 		YrkesTitels.MedelLon AS "Genomsnittslön",
 		OrtNamn AS "Ort"
 	FROM
@@ -380,6 +380,19 @@ PRINT 'Kunde inte lägga till annons'
 ROLLBACK TRANSACTION
 END CATCH
 END
+
+GO
+
+--Sök bland egna annonser
+CREATE PROC spSoekAnnons(&#64ID int)
+AS
+BEGIN
+SELECT dbo.fnHelaNamnet(&#64ID) AS "Namn", PubliceringsDatum AS "Publiceringsdatum", Titel, Beskrivning
+FROM Anvandares
+JOIN Annons ON Anvandares.AnvandareId = Annons.AnvandareRefId
+WHERE AnvandareId = &#64ID
+GROUP BY ForNamn,EfterNamn,Titel, Beskrivning, PubliceringsDatum
+END;
 
     </pre>
 

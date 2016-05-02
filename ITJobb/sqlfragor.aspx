@@ -29,8 +29,8 @@
              <p class="lead">Lista samtliga yrkestitlar och mängden jobb som finns representerade för vardera yrkestitel:</p>
         <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource1" CssClass= "table table-striped table-bordered table-condensed">
                 <Columns>
-                    <asp:BoundField DataField="JobName" HeaderText="JobName" SortExpression="JobName" />
-                    <asp:BoundField DataField="Job Amount" HeaderText="Job Amount" ReadOnly="True" SortExpression="Job Amount" />
+                    <asp:BoundField DataField="Titel" HeaderText="Titel" SortExpression="Titel" />
+                    <asp:BoundField DataField="Antal" HeaderText="Antal" ReadOnly="True" SortExpression="Antal" />
                 </Columns>
             </asp:GridView>
             <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ITJobbDBConnectionString %>" SelectCommand="spYrkestitlar" SelectCommandType="StoredProcedure"></asp:SqlDataSource>
@@ -39,8 +39,8 @@
             <p class="lead">Lista samtliga orter och mängden jobb som finns representerade för vardera ort:</p>
         <asp:GridView ID="GridView2" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource2" CssClass= "table table-striped table-bordered table-condensed">
                 <Columns>
-                    <asp:BoundField DataField="OrtNamn" HeaderText="OrtNamn" SortExpression="OrtNamn" />
-                    <asp:BoundField DataField="total jobb" HeaderText="total jobb" ReadOnly="True" SortExpression="total jobb" />
+                    <asp:BoundField DataField="Ort" HeaderText="Ort" SortExpression="Ort" />
+                    <asp:BoundField DataField="Antal" HeaderText="Antal" ReadOnly="True" SortExpression="Antal" />
                 </Columns>
             </asp:GridView>
             <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:ITJobbDBConnectionString %>" SelectCommand="spOrter" SelectCommandType="StoredProcedure"></asp:SqlDataSource>
@@ -48,8 +48,8 @@
              <p class="lead">Lista samtliga målsidor och mängden jobb som finns representerade för vardera målsida:</p>
         <asp:GridView ID="GridView3" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource3" CssClass= "table table-striped table-bordered table-condensed">
                 <Columns>
-                    <asp:BoundField DataField="Jobbsida" HeaderText="Jobbsida" SortExpression="Jobbsida" />
-                    <asp:BoundField DataField="Antal Jobb" HeaderText="Antal Jobb" ReadOnly="True" SortExpression="Antal Jobb" />
+                    <asp:BoundField DataField="Ursprungssida" HeaderText="Ursprungssida" SortExpression="Ursprungssida" />
+                    <asp:BoundField DataField="Antal" HeaderText="Antal" ReadOnly="True" SortExpression="Antal" />
                 </Columns>
             </asp:GridView>
             <asp:SqlDataSource ID="SqlDataSource3" runat="server" ConnectionString="<%$ ConnectionStrings:ITJobbDBConnectionString %>" SelectCommand="spMålsida" SelectCommandType="StoredProcedure"></asp:SqlDataSource>
@@ -57,9 +57,9 @@
              <p class="lead">Lista samtliga rekryterare och mängden jobb som finns representerade för vardera rekryterare:</p>
         <asp:GridView ID="GridView4" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource4" CssClass= "table table-striped table-bordered table-condensed">
                 <Columns>
-                    <asp:BoundField DataField="Antal Jobb" HeaderText="Antal Jobb" ReadOnly="True" SortExpression="Antal Jobb" />
-                    <asp:BoundField DataField="ForetagsNamn" HeaderText="ForetagsNamn" SortExpression="ForetagsNamn" />
-                    <asp:BoundField DataField="AnnonsURL" HeaderText="AnnonsURL" SortExpression="AnnonsURL" />
+                    <asp:BoundField DataField="Antal" HeaderText="Antal" ReadOnly="True" SortExpression="Antal" />
+                    <asp:BoundField DataField="Företag" HeaderText="Företag" SortExpression="Företag" />
+                    <asp:BoundField DataField="Företags URL" HeaderText="Företags URL" SortExpression="Företags URL" />
                 </Columns>
             </asp:GridView>
             <asp:SqlDataSource ID="SqlDataSource4" runat="server" ConnectionString="<%$ ConnectionStrings:ITJobbDBConnectionString %>" SelectCommand="spAntalJobbPerArbetsgivare" SelectCommandType="StoredProcedure"></asp:SqlDataSource>
@@ -68,7 +68,7 @@
         <asp:GridView ID="GridView5" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource5" CssClass= "table table-striped table-bordered table-condensed">
                 <Columns>
                     <asp:BoundField DataField="Publicerades" HeaderText="Publicerades" SortExpression="Publicerades" />
-                    <asp:BoundField DataField="Tjänst" HeaderText="Tjänst" SortExpression="Tjänst" />
+                    <asp:BoundField DataField="Titel" HeaderText="Titel" SortExpression="Titel" />
                     <asp:BoundField DataField="Genomsnittslön" HeaderText="Genomsnittslön" SortExpression="Genomsnittslön" />
                     <asp:BoundField DataField="Ort" HeaderText="Ort" SortExpression="Ort" />
                 </Columns>
@@ -82,7 +82,7 @@
             <asp:GridView ID="GridView6" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource6" CssClass= "table table-striped table-bordered table-condensed">
                 <Columns>
                     <asp:BoundField DataField="Publicerades" HeaderText="Publicerades" SortExpression="Publicerades" />
-                    <asp:BoundField DataField="Jobb Titel" HeaderText="Jobb Titel" SortExpression="Jobb Titel" />
+                    <asp:BoundField DataField="Titel" HeaderText="Titel" SortExpression="Titel" />
                     <asp:BoundField DataField="Ort" HeaderText="Ort" SortExpression="Ort" />
                     <asp:BoundField DataField="Rekryterare" HeaderText="Rekryterare" SortExpression="Rekryterare" />
                 </Columns>
@@ -100,8 +100,9 @@
             <asp:SqlDataSource ID="SqlDataSource7" runat="server" ConnectionString="<%$ ConnectionStrings:ITJobbDBConnectionString %>" SelectCommand="SELECT * FROM [Malsidas]"></asp:SqlDataSource>
             <asp:GridView ID="GridView7" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource8" CssClass= "table table-striped table-bordered table-condensed">
                 <Columns>
-                    <asp:BoundField DataField="Site Name" HeaderText="Site Name" SortExpression="Site Name" />
-                    <asp:BoundField DataField="Work Title" HeaderText="Work Title" SortExpression="Work Title" />
+                    <asp:BoundField DataField="Ursprungssida" HeaderText="Ursprungssida" SortExpression="Ursprungssida" />
+                    <asp:BoundField DataField="Titel" HeaderText="Titel" SortExpression="Titel" />
+                    <asp:BoundField DataField="Annons URL" HeaderText="Annons URL" SortExpression="Annons URL" />
                 </Columns>
             </asp:GridView>
             <asp:SqlDataSource ID="SqlDataSource8" runat="server" ConnectionString="<%$ ConnectionStrings:ITJobbDBConnectionString %>" SelectCommand="spMalsidor" SelectCommandType="StoredProcedure">
@@ -117,8 +118,8 @@
             <asp:SqlDataSource ID="SqlDataSource9" runat="server" ConnectionString="<%$ ConnectionStrings:ITJobbDBConnectionString %>" SelectCommand="SELECT * FROM [Orts]"></asp:SqlDataSource>
             <asp:GridView ID="GridView8" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource10" CssClass= "table table-striped table-bordered table-condensed">
                 <Columns>
-                    <asp:BoundField DataField="ort" HeaderText="ort" SortExpression="ort" />
-                    <asp:BoundField DataField="yrke" HeaderText="yrke" SortExpression="yrke" />
+                    <asp:BoundField DataField="Ort" HeaderText="Ort" SortExpression="Ort" />
+                    <asp:BoundField DataField="Titel" HeaderText="Titel" SortExpression="Titel" />
                 </Columns>
             </asp:GridView>
             <asp:SqlDataSource ID="SqlDataSource10" runat="server" ConnectionString="<%$ ConnectionStrings:ITJobbDBConnectionString %>" SelectCommand="spSokOrt" SelectCommandType="StoredProcedure">
@@ -135,7 +136,7 @@
             <asp:GridView ID="GridView9" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource12" CssClass= "table table-striped table-bordered table-condensed">
                 <Columns>
                     <asp:BoundField DataField="Publicerades" HeaderText="Publicerades" SortExpression="Publicerades" />
-                    <asp:BoundField DataField="Jobb Titel" HeaderText="Jobb Titel" SortExpression="Jobb Titel" />
+                    <asp:BoundField DataField="Titel" HeaderText="Titel" SortExpression="Titel" />
                     <asp:BoundField DataField="Ort" HeaderText="Ort" SortExpression="Ort" />
                     <asp:BoundField DataField="Rekryterare" HeaderText="Rekryterare" SortExpression="Rekryterare" />
                 </Columns>
@@ -153,8 +154,8 @@
             <asp:SqlDataSource ID="SqlDataSource13" runat="server" ConnectionString="<%$ ConnectionStrings:ITJobbDBConnectionString %>" SelectCommand="SELECT * FROM [YrkesTitels]"></asp:SqlDataSource>
             <asp:GridView ID="GridView10" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource14" CssClass= "table table-striped table-bordered table-condensed">
                 <Columns>
-                    <asp:BoundField DataField="AnnonsURL" HeaderText="AnnonsURL" SortExpression="AnnonsURL" />
-                    <asp:BoundField DataField="YrkesNamn" HeaderText="YrkesNamn" SortExpression="YrkesNamn" />
+                    <asp:BoundField DataField="Titel" HeaderText="Titel" SortExpression="Titel" />
+                    <asp:BoundField DataField="Annons URL" HeaderText="Annons URL" SortExpression="Annons URL" />
                 </Columns>
             </asp:GridView>
             <asp:SqlDataSource ID="SqlDataSource14" runat="server" ConnectionString="<%$ ConnectionStrings:ITJobbDBConnectionString %>" SelectCommand="spSoekYrke" SelectCommandType="StoredProcedure">
@@ -163,7 +164,7 @@
                 </SelectParameters>
             </asp:SqlDataSource>
             <hr>
-             <p class="lead">Inloggad användare:</p>
+             <p class="lead">Välj inloggad användare:</p>
             <asp:DropDownList ID="DropDownList5" runat="server" AutoPostBack="True" DataSourceID="SqlDataSource15" DataTextField="AnvandareId" DataValueField="AnvandareId" CssClass="form-control">
             </asp:DropDownList>
         <br />
@@ -171,7 +172,7 @@
              <p class="lead">Lista jobb som användare sökt:</p>
         <asp:GridView ID="GridView11" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource16" CssClass= "table table-striped table-bordered table-condensed">
                 <Columns>
-                    <asp:BoundField DataField="Jobb Titel" HeaderText="Jobb Titel" SortExpression="Jobb Titel" />
+                    <asp:BoundField DataField="Titel" HeaderText="Titel" SortExpression="Titel" />
                     <asp:BoundField DataField="Ort" HeaderText="Ort" SortExpression="Ort" />
                     <asp:BoundField DataField="Medellön" HeaderText="Medellön" SortExpression="Medellön" />
                     <asp:BoundField DataField="Rekryterare" HeaderText="Rekryterare" SortExpression="Rekryterare" />
@@ -184,12 +185,14 @@
                     <asp:ControlParameter ControlID="DropDownList5" Name="ID" PropertyName="SelectedValue" Type="String" />
                 </SelectParameters>
             </asp:SqlDataSource>
+            
+        
             <br />
              <p class="lead">Visa CV URL:</p>
         <asp:GridView ID="GridView12" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource17" CssClass= "table table-striped table-bordered table-condensed">
                 <Columns>
                     <asp:BoundField DataField="Namn" HeaderText="Namn" ReadOnly="True" SortExpression="Namn" />
-                    <asp:BoundField DataField="CVURL" HeaderText="CVURL" SortExpression="CVURL" />
+                    <asp:BoundField DataField="CV URL" HeaderText="CV URL" SortExpression="CV URL" />
                 </Columns>
             </asp:GridView>
             <asp:SqlDataSource ID="SqlDataSource17" runat="server" ConnectionString="<%$ ConnectionStrings:ITJobbDBConnectionString %>" SelectCommand="spListaCV" SelectCommandType="StoredProcedure">
@@ -201,8 +204,8 @@
              <p class="lead">Visa Personligtbrev URL:</p>
         <asp:GridView ID="GridView13" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource18" CssClass= "table table-striped table-bordered table-condensed">
                 <Columns>
-                    <asp:BoundField DataField="Name" HeaderText="Name" ReadOnly="True" SortExpression="Name" />
-                    <asp:BoundField DataField="Personal Letter" HeaderText="Personal Letter" SortExpression="Personal Letter" />
+                    <asp:BoundField DataField="Namn" HeaderText="Namn" ReadOnly="True" SortExpression="Namn" />
+                    <asp:BoundField DataField="Personligtbrev URL" HeaderText="Personligtbrev URL" SortExpression="Personligtbrev URL" />
                 </Columns>
             </asp:GridView>
             <asp:SqlDataSource ID="SqlDataSource18" runat="server" ConnectionString="<%$ ConnectionStrings:ITJobbDBConnectionString %>" SelectCommand="spListaPB" SelectCommandType="StoredProcedure">
@@ -211,11 +214,28 @@
                 </SelectParameters>
             </asp:SqlDataSource>
             <br />
+            <p class="lead">Visa inloggad användares personannonser:</p>
+                <asp:GridView ID="GridView15" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource20" CssClass= "table table-striped table-bordered table-condensed">
+                <Columns>
+                    <asp:BoundField DataField="Namn" HeaderText="Namn" ReadOnly="True" SortExpression="Namn" />
+                    <asp:BoundField DataField="Publiceringsdatum" HeaderText="Publiceringsdatum" SortExpression="Publiceringsdatum" />
+                    <asp:BoundField DataField="Titel" HeaderText="Titel" SortExpression="Titel" />
+                    <asp:BoundField DataField="Beskrivning" HeaderText="Beskrivning" SortExpression="Beskrivning" />
+                </Columns>
+                </asp:GridView>
+                <asp:SqlDataSource ID="SqlDataSource20" runat="server" ConnectionString="<%$ ConnectionStrings:ITJobbDBConnectionString %>" SelectCommand="spSoekAnnons" SelectCommandType="StoredProcedure">
+                    <SelectParameters>
+                        <asp:ControlParameter ControlID="DropDownList5" Name="ID" PropertyName="SelectedValue" Type="Int32" />
+                    </SelectParameters>
+                </asp:SqlDataSource>
+            
+        
+            <br />
              <p class="lead">Visa företagsannonser som matchar användarens personannons:</p>
         <asp:GridView ID="GridView14" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource19" CssClass= "table table-striped table-bordered table-condensed">
                 <Columns>
                     <asp:BoundField DataField="Publicerades" HeaderText="Publicerades" SortExpression="Publicerades" />
-                    <asp:BoundField DataField="YrkesNamn" HeaderText="YrkesNamn" SortExpression="YrkesNamn" />
+                    <asp:BoundField DataField="Titel" HeaderText="Titel" SortExpression="Titel" />
                     <asp:BoundField DataField="Medellön" HeaderText="Medellön" SortExpression="Medellön" />
                     <asp:BoundField DataField="Ort" HeaderText="Ort" SortExpression="Ort" />
                     <asp:BoundField DataField="Rekryterare" HeaderText="Rekryterare" SortExpression="Rekryterare" />

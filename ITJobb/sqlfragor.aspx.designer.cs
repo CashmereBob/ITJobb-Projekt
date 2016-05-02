@@ -355,6 +355,24 @@ namespace ITJobb {
         protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource18;
         
         /// <summary>
+        /// GridView15 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView GridView15;
+        
+        /// <summary>
+        /// SqlDataSource20 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource20;
+        
+        /// <summary>
         /// GridView14 control.
         /// </summary>
         /// <remarks>
