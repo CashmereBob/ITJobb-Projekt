@@ -250,21 +250,11 @@
     <Content Include="Views\Annons\Details.cshtml" />
     <Content Include="Views\Annons\Edit.cshtml" />
     <Content Include="Views\Annons\Index.cshtml" />
-    <Content Include="Views\Anvandare\Create.cshtml" />
-    <Content Include="Views\Anvandare\Delete.cshtml" />
-    <Content Include="Views\Anvandare\Details.cshtml" />
-    <Content Include="Views\Anvandare\Edit.cshtml" />
-    <Content Include="Views\Anvandare\Index.cshtml" />
     <Content Include="Views\ForetagsAnnons\Create.cshtml" />
     <Content Include="Views\ForetagsAnnons\Delete.cshtml" />
     <Content Include="Views\ForetagsAnnons\Details.cshtml" />
     <Content Include="Views\ForetagsAnnons\Edit.cshtml" />
     <Content Include="Views\ForetagsAnnons\Index.cshtml" />
-    <Content Include="Views\Malsida\Create.cshtml" />
-    <Content Include="Views\Malsida\Delete.cshtml" />
-    <Content Include="Views\Malsida\Details.cshtml" />
-    <Content Include="Views\Malsida\Edit.cshtml" />
-    <Content Include="Views\Malsida\Index.cshtml" />
     <Content Include="Views\Orts\Create.cshtml" />
     <Content Include="Views\Orts\Delete.cshtml" />
     <Content Include="Views\Orts\Details.cshtml" />
@@ -305,7 +295,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

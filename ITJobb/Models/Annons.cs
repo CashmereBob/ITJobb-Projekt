@@ -17,6 +17,10 @@ namespace ITJobb.Models
         }
 
         public int AnnonsId { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Publicerings Datum")]
+
         public DateTime PubliceringsDatum { get; set; }
 
         public int? YrkestitelRefId { get; set; }
