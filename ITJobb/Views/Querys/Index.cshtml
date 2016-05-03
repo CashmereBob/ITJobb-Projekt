@@ -90,9 +90,9 @@ GO
 CREATE PROC spSoekYrke (&#64Yrkesnamn NVARCHAR(50))
 AS
 BEGIN
-SELECT YrkesNamn AS "Titel", AnnonsURL AS "Annons URL"
-FROM Annons INNER JOIN YrkesTitels ON Annons.YrkestitelRefId=YrkesTitels.YrkesTitelId 
-WHERE AnnonsURL IS NOT NULL AND YrkesNamn LIKE '%' + &#64Yrkesnamn + '%';
+    SELECT YrkesNamn AS "Titel", AnnonsURL AS "Annons URL"
+    FROM Annons INNER JOIN YrkesTitels ON Annons.YrkestitelRefId=YrkesTitels.YrkesTitelId 
+    WHERE AnnonsURL IS NOT NULL AND YrkesNamn LIKE '%' + &#64Yrkesnamn + '%';
 END
 GO
 
@@ -100,9 +100,9 @@ GO
 CREATE PROC spListaCV (&#64AnvändarID INT)
 AS
 BEGIN
-SELECT dbo.fnHelaNamnet(&#64AnvändarID) AS "Namn", CVURL AS "CV URL"
-FROM Anvandares
-WHERE AnvandareId = &#64AnvändarID;
+    SELECT dbo.fnHelaNamnet(&#64AnvändarID) AS "Namn", CVURL AS "CV URL"
+    FROM Anvandares
+    WHERE AnvandareId = &#64AnvändarID;
 END
 GO
 
@@ -122,16 +122,16 @@ GO
 CREATE PROC spSokForetagsAnnonser(&#64Rekryterare NVARCHAR(MAX))
 AS
 BEGIN
-SELECT PubliceringsDatum AS "Publicerades", YrkesNamn AS "Titel", OrtNamn AS "Ort", ForetagsNamn As "Rekryterare"
-FROM Annons
-	INNER JOIN Rekryterares
-	ON Annons.MalsidaRefId = Rekryterares.RekryterareId
-	INNER JOIN YrkesTitels
-	ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
-	INNER JOIN Orts
-	ON Annons.OrtRefId = Orts.OrtId
-WHERE ForetagsNamn LIKE '%' + &#64Rekryterare + '%' --Fyll i sökord här
-ORDER BY PubliceringsDatum;
+    SELECT PubliceringsDatum AS "Publicerades", YrkesNamn AS "Titel", OrtNamn AS "Ort", ForetagsNamn As "Rekryterare"
+    FROM Annons
+	    INNER JOIN Rekryterares
+	    ON Annons.MalsidaRefId = Rekryterares.RekryterareId
+	    INNER JOIN YrkesTitels
+	    ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
+	    INNER JOIN Orts
+	    ON Annons.OrtRefId = Orts.OrtId
+    WHERE ForetagsNamn LIKE '%' + &#64Rekryterare + '%' --Fyll i sökord här
+    ORDER BY PubliceringsDatum;
 END
 GO
 
@@ -139,17 +139,17 @@ GO
 CREATE PROC spSokSoktaJobb(&#64ID NVARCHAR(MAX))
 AS
 BEGIN
-SELECT YrkesNamn AS "Titel", OrtNamn AS "Ort", YrkesTitels.MedelLon AS "Medellön", ForetagsNamn As "Rekryterare", Rekryterares.MailAdress AS "Kontakt Adress", PubliceringsDatum AS "Publicerades"
-FROM AnvandareForetagsAnnons, Anvandares, Annons
-	INNER JOIN Rekryterares
-	ON Annons.MalsidaRefId = Rekryterares.RekryterareId
-	INNER JOIN YrkesTitels
-	ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
-	INNER JOIN Orts
-	ON Annons.OrtRefId = Orts.OrtId
-WHERE AnvandareForetagsAnnons.Anvandare_AnvandareId = Anvandares.AnvandareId AND AnvandareForetagsAnnons.ForetagsAnnons_AnnonsId = Annons.AnnonsId
-	AND Anvandares.AnvandareId = &#64ID --Fyll i inloggad ID här
-ORDER BY PubliceringsDatum
+    SELECT YrkesNamn AS "Titel", OrtNamn AS "Ort", YrkesTitels.MedelLon AS "Medellön", ForetagsNamn As "Rekryterare", Rekryterares.MailAdress AS "Kontakt Adress", PubliceringsDatum AS "Publicerades"
+    FROM AnvandareForetagsAnnons, Anvandares, Annons
+	    INNER JOIN Rekryterares
+	    ON Annons.MalsidaRefId = Rekryterares.RekryterareId
+	    INNER JOIN YrkesTitels
+	    ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
+	    INNER JOIN Orts
+	    ON Annons.OrtRefId = Orts.OrtId
+    WHERE AnvandareForetagsAnnons.Anvandare_AnvandareId = Anvandares.AnvandareId AND AnvandareForetagsAnnons.ForetagsAnnons_AnnonsId = Annons.AnnonsId
+	    AND Anvandares.AnvandareId = &#64ID --Fyll i inloggad ID här
+    ORDER BY PubliceringsDatum
 END
 GO
 	
@@ -159,34 +159,36 @@ AS
 BEGIN
 DECLARE &#64Tag NVARCHAR(MAX)
 DECLARE &#64Result TABLE(Publicerades Date, [Titel] NVARCHAR(MAX), Medellön Money, Ort NVARCHAR(MAX), Rekryterare NVARCHAR(MAX), [Tag Träff] NVARCHAR(MAX))
-DECLARE Taggar CURSOR FOR SELECT TagNamn
-FROM tags, TagAnnons, Annons
+
+DECLARE Taggar CURSOR FOR SELECT TagNamn FROM tags, TagAnnons, Annons
 WHERE TagAnnons.Annons_AnnonsId = Annons.AnnonsId AND TagAnnons.Tag_TagId = Tags.TagId
 AND annons.Discriminator = 'PersonAnnons'
 AND Annons.AnvandareRefId = &#64ID --Fyll i inloggad ID här
+
 OPEN Taggar
+
 FETCH NEXT FROM Taggar INTO &#64Tag
 WHILE(&#64&#64FETCH_STATUS = 0)
 BEGIN
-INSERT INTO &#64Result
-SELECT PubliceringsDatum, YrkesNamn, MedelLon, OrtNamn, ForetagsNamn, Tags.TagNamn
-FROM 
-	tags, TagAnnons, Annons 
-	INNER JOIN Rekryterares
-	ON Annons.MalsidaRefId = Rekryterares.RekryterareId
-	INNER JOIN YrkesTitels
-	ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
-	INNER JOIN Orts
-	ON Annons.OrtRefId = Orts.OrtId
-WHERE TagAnnons.Annons_AnnonsId = Annons.AnnonsId AND TagAnnons.Tag_TagId = Tags.TagId
-AND annons.Discriminator = 'ForetagsAnnons' AND
-Tags.TagNamn = &#64Tag
-FETCH NEXT FROM Taggar INTO &#64Tag
+    INSERT INTO &#64Result
+    SELECT PubliceringsDatum, YrkesNamn, MedelLon, OrtNamn, ForetagsNamn, Tags.TagNamn
+    FROM 
+	    tags, TagAnnons, Annons 
+	    INNER JOIN Rekryterares
+	    ON Annons.MalsidaRefId = Rekryterares.RekryterareId
+	    INNER JOIN YrkesTitels
+	    ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
+	    INNER JOIN Orts
+	    ON Annons.OrtRefId = Orts.OrtId
+    WHERE TagAnnons.Annons_AnnonsId = Annons.AnnonsId AND TagAnnons.Tag_TagId = Tags.TagId
+    AND annons.Discriminator = 'ForetagsAnnons' AND
+    Tags.TagNamn = &#64Tag
+    FETCH NEXT FROM Taggar INTO &#64Tag
 END	
 CLOSE Taggar
 DEALLOCATE Taggar
-SELECT *
-FROM &#64Result
+    SELECT *
+    FROM &#64Result
 END
 GO
 
@@ -194,11 +196,11 @@ GO
 CREATE PROC spYrkestitlar
 AS
 BEGIN
-SELECT YrkesNamn AS "Titel", COUNT(*) AS "Antal"
-FROM Annons
-    INNER JOIN YrkesTitels
-    ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
-GROUP BY YrkesNamn;
+    SELECT YrkesNamn AS "Titel", COUNT(*) AS "Antal"
+    FROM Annons
+        INNER JOIN YrkesTitels
+        ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
+    GROUP BY YrkesNamn;
 END
 GO
 
@@ -206,13 +208,13 @@ GO
 CREATE PROC spMalsidor (&#64malsida NVARCHAR(MAX))
 AS
 BEGIN
-SELECT MalsidaNamn AS 'Ursprungssida', YrkesNamn AS 'Titel', AnnonsURL AS "Annons URL"
-FROM Annons
-    INNER JOIN Malsidas
-    ON Annons.MalsidaRefId = Malsidas.MalsidaId
-    INNER JOIN YrkesTitels
-    ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
-WHERE MalsidaNamn LIKE '%'+&#64malsida+'%'; --Skriv in själva jobsiten inom fnuttarna
+    SELECT MalsidaNamn AS 'Ursprungssida', YrkesNamn AS 'Titel', AnnonsURL AS "Annons URL"
+    FROM Annons
+        INNER JOIN Malsidas
+        ON Annons.MalsidaRefId = Malsidas.MalsidaId
+        INNER JOIN YrkesTitels
+        ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
+    WHERE MalsidaNamn LIKE '%'+&#64malsida+'%'; --Skriv in själva jobsiten inom fnuttarna
 END
 GO
 
@@ -220,15 +222,15 @@ GO
 CREATE PROC spLäggAnvändare (&#64Fnamn NVARCHAR(MAX), &#64Enamn NVARCHAR(MAX), &#64Telefon NVARCHAR(MAX) = null, &#64Mail NVARCHAR(MAX), &#64CV NVARCHAR(MAX)=null, &#64Pb NVARCHAR(MAX)=null)
 AS
 BEGIN
-BEGIN TRY
-BEGIN TRANSACTION
-	INSERT INTO Anvandares VALUES (&#64Fnamn, &#64Enamn, &#64Telefon, &#64Mail, &#64Cv, &#64Pb)
-	COMMIT TRANSACTION
-END TRY
-BEGIN CATCH
-	PRINT 'Coudnt add user'
-	ROLLBACK TRANSACTION
-END CATCH
+    BEGIN TRY
+    BEGIN TRANSACTION
+	    INSERT INTO Anvandares VALUES (&#64Fnamn, &#64Enamn, &#64Telefon, &#64Mail, &#64Cv, &#64Pb)
+	    COMMIT TRANSACTION
+    END TRY
+    BEGIN CATCH
+	    PRINT 'Coudnt add user'
+	    ROLLBACK TRANSACTION
+    END CATCH
 END
 GO
 
@@ -236,9 +238,9 @@ GO
 CREATE PROC spListaPB (&#64ID INT)
 AS
 BEGIN
-SELECT dbo.fnHelaNamnet(&#64ID) AS 'Namn', PersonligtBrevURL AS 'Personligtbrev URL'
-FROM Anvandares
-WHERE AnvandareId = &#64ID
+    SELECT dbo.fnHelaNamnet(&#64ID) AS 'Namn', PersonligtBrevURL AS 'Personligtbrev URL'
+    FROM Anvandares
+    WHERE AnvandareId = &#64ID
 END
 GO
 
@@ -246,9 +248,9 @@ GO
 CREATE PROC spOrter
 AS
 BEGIN
-SELECT Orts.OrtNamn AS "Ort", count(*) AS "Antal"
-FROM Annons JOIN Orts ON annons.OrtRefId = orts.OrtId
-GROUP BY Orts.OrtNamn
+    SELECT Orts.OrtNamn AS "Ort", count(*) AS "Antal"
+    FROM Annons JOIN Orts ON annons.OrtRefId = orts.OrtId
+    GROUP BY Orts.OrtNamn
 END
 GO
 
@@ -256,10 +258,10 @@ GO
 CREATE PROC spSokOrt (&#64ort NVARCHAR(MAX))
 AS
 BEGIN
-SELECT Orts.OrtNamn AS "Ort", YrkesTitels.YrkesNamn AS "Titel"
-FROM annons JOIN Orts ON Annons.OrtRefId = orts.OrtId
-JOIN YrkesTitels ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
-WHERE Orts.OrtNamn LIKE '%' + &#64ort + '%'
+    SELECT Orts.OrtNamn AS "Ort", YrkesTitels.YrkesNamn AS "Titel"
+    FROM annons JOIN Orts ON Annons.OrtRefId = orts.OrtId
+    JOIN YrkesTitels ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
+    WHERE Orts.OrtNamn LIKE '%' + &#64ort + '%'
 END
 GO
 
@@ -275,8 +277,8 @@ BEGIN TRANSACTION
 COMMIT TRANSACTION
 END TRY
 BEGIN CATCH
-PRINT 'Could not remove user'
-ROLLBACK TRANSACTION
+    PRINT 'Could not remove user'
+    ROLLBACK TRANSACTION
 END CATCH
 END
 GO
@@ -285,16 +287,16 @@ GO
 CREATE PROC spFriSok (&#64sok NVARCHAR(MAX))
 AS
 BEGIN
-SELECT PubliceringsDatum AS "Publicerades", YrkesNamn AS "Titel", OrtNamn AS "Ort", ForetagsNamn As "Rekryterare"
-FROM Annons
-	INNER JOIN Rekryterares
-	ON Annons.MalsidaRefId = Rekryterares.RekryterareId
-	INNER JOIN YrkesTitels
-	ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
-	INNER JOIN Orts
-	ON Annons.OrtRefId = Orts.OrtId
-WHERE YrkesTitels.YrkesNamn LIKE '%' + &#64sok + '%' OR Annons.Titel LIKE '%' + &#64sok + '%' --Fyll i sökord här
-ORDER BY PubliceringsDatum
+    SELECT PubliceringsDatum AS "Publicerades", YrkesNamn AS "Titel", OrtNamn AS "Ort", ForetagsNamn As "Rekryterare"
+    FROM Annons
+	    INNER JOIN Rekryterares
+	    ON Annons.MalsidaRefId = Rekryterares.RekryterareId
+	    INNER JOIN YrkesTitels
+	    ON Annons.YrkestitelRefId = YrkesTitels.YrkesTitelId
+	    INNER JOIN Orts
+	    ON Annons.OrtRefId = Orts.OrtId
+    WHERE YrkesTitels.YrkesNamn LIKE '%' + &#64sok + '%' OR Annons.Titel LIKE '%' + &#64sok + '%' --Fyll i sökord här
+    ORDER BY PubliceringsDatum
 END
 GO
 
@@ -302,25 +304,25 @@ GO
 CREATE PROC spTaBortPersonAnnons (&#64AnnonsID INT, &#64AnvandareID INT)
 AS
 BEGIN
-BEGIN TRY
-BEGIN TRANSACTION
-DECLARE &#64AnvandareAnnons INT
-SET &#64AnvandareAnnons = (SELECT AnvandareRefId FROM Annons WHERE AnnonsId = &#64AnnonsID) 
-IF (&#64AnvandareAnnons = &#64AnvandareID)
-	BEGIN
-		DELETE FROM TagAnnons WHERE Annons_AnnonsId = &#64AnnonsID
-		DELETE FROM Annons WHERE AnnonsId = &#64AnnonsID
-		COMMIT TRANSACTION
-	END
-ELSE
-	BEGIN
-		PRINT 'User missing permission to delete this post'
-		ROLLBACK TRANSACTION
-	END
-END TRY
-BEGIN CATCH
-	ROLLBACK TRANSACTION
-END CATCH
+    BEGIN TRY
+    BEGIN TRANSACTION
+    DECLARE &#64AnvandareAnnons INT
+    SET &#64AnvandareAnnons = (SELECT AnvandareRefId FROM Annons WHERE AnnonsId = &#64AnnonsID) 
+    IF (&#64AnvandareAnnons = &#64AnvandareID)
+	    BEGIN
+		    DELETE FROM TagAnnons WHERE Annons_AnnonsId = &#64AnnonsID
+		    DELETE FROM Annons WHERE AnnonsId = &#64AnnonsID
+		    COMMIT TRANSACTION
+	    END
+    ELSE
+	    BEGIN
+		    PRINT 'User missing permission to delete this post'
+		    ROLLBACK TRANSACTION
+	    END
+    END TRY
+    BEGIN CATCH
+	    ROLLBACK TRANSACTION
+    END CATCH
 END
 GO
 
@@ -328,14 +330,14 @@ GO
 CREATE PROC spLäggTillPersonligtBrev (&#64URL NVARCHAR(MAX), &#64AnvandareID INT)
 AS
 BEGIN
-BEGIN TRY
-BEGIN TRANSACTION
-	UPDATE Anvandares SET PersonligtBrevURL = &#64URL WHERE AnvandareId = &#64AnvandareID
-	COMMIT TRANSACTION
-END TRY
-BEGIN CATCH
-	ROLLBACK TRANSACTION
-END CATCH
+    BEGIN TRY
+    BEGIN TRANSACTION
+	    UPDATE Anvandares SET PersonligtBrevURL = &#64URL WHERE AnvandareId = &#64AnvandareID
+	    COMMIT TRANSACTION
+    END TRY
+    BEGIN CATCH
+	    ROLLBACK TRANSACTION
+    END CATCH
 END
 GO
 
@@ -364,21 +366,21 @@ GO
 CREATE PROC spAddJobAd (&#64Titel NVARCHAR(MAX) ,&#64Beskrivning NVARCHAR(MAX) ,&#64YrkesTitel INT ,&#64OrtID INT ,&#64TagID INT ,&#64AnvID INT)
 AS
 BEGIN
-BEGIN TRY
-BEGIN TRANSACTION
-	INSERT INTO Annons VALUES (GETDATE(), &#64YrkesTitel, &#64OrtID, null, null, null, &#64Titel, &#64Beskrivning, &#64AnvID, 'PersonAnnons')
-	DECLARE &#64ID INT
-	SET &#64ID = (
-	SELECT MAX(AnnonsId)
-	FROM Annons
-	)
-	INSERT INTO TagAnnons VALUES (&#64TagID, &#64ID)
-COMMIT TRANSACTION
-END TRY
-BEGIN CATCH
-PRINT 'Kunde inte lägga till annons'
-ROLLBACK TRANSACTION
-END CATCH
+    BEGIN TRY
+    BEGIN TRANSACTION
+	    INSERT INTO Annons VALUES (GETDATE(), &#64YrkesTitel, &#64OrtID, null, null, null, &#64Titel, &#64Beskrivning, &#64AnvID, 'PersonAnnons')
+	    DECLARE &#64ID INT
+	    SET &#64ID = (
+	    SELECT MAX(AnnonsId)
+	    FROM Annons
+	    )
+	    INSERT INTO TagAnnons VALUES (&#64TagID, &#64ID)
+    COMMIT TRANSACTION
+    END TRY
+    BEGIN CATCH
+        PRINT 'Kunde inte lägga till annons'
+        ROLLBACK TRANSACTION
+    END CATCH
 END
 
 GO
@@ -387,11 +389,11 @@ GO
 CREATE PROC spSoekAnnons(&#64ID int)
 AS
 BEGIN
-SELECT dbo.fnHelaNamnet(&#64ID) AS "Namn", PubliceringsDatum AS "Publiceringsdatum", Titel, Beskrivning
-FROM Anvandares
-JOIN Annons ON Anvandares.AnvandareId = Annons.AnvandareRefId
-WHERE AnvandareId = &#64ID
-GROUP BY ForNamn,EfterNamn,Titel, Beskrivning, PubliceringsDatum
+    SELECT dbo.fnHelaNamnet(&#64ID) AS "Namn", PubliceringsDatum AS "Publiceringsdatum", Titel, Beskrivning
+    FROM Anvandares
+    JOIN Annons ON Anvandares.AnvandareId = Annons.AnvandareRefId
+    WHERE AnvandareId = &#64ID
+    GROUP BY ForNamn,EfterNamn,Titel, Beskrivning, PubliceringsDatum
 END;
 
     </pre>
