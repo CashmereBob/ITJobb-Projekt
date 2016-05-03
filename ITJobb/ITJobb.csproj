@@ -193,6 +193,7 @@
     <Compile Include="sqlfragor.aspx.designer.cs">
       <DependentUpon>sqlfragor.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\AnnonsTagWM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
