@@ -13,7 +13,7 @@ USE ITJobbDB
 GO
 
 --Trigger För Att skicka notifikationer om företagsannons matchar personannons
-CREATE TRIGGER trEmailMatch  -- namn på trigger
+        CREATE TRIGGER trEmailMatch  -- namn på trigger
 ON TagAnnons -- Vilken table triggern ska vara på
 FOR INSERT -- Triggern aktiveras när något sätts in i tablen
 AS
@@ -22,42 +22,63 @@ BEGIN
 	BEGIN TRANSACTION -- Sätter igång transaktion
 	DECLARE &#64Tag INT --allokerar minne för variabler
 	DECLARE &#64ID INT
-	DECLARE &#64Adress NVARCHAR(MAX)
+	DECLARE &#64AId INT
 	DECLARE &#64FöretagsAnnons NVARCHAR(MAX)
-	DECLARE &#64AnnonsURL NVARCHAR(MAX)
+	DECLARE &#64Annons INT
 	SELECT &#64Tag = Tag_TagId FROM inserted --tilldelar variabel id på taggen som sätts in i tabellen
 	SELECT &#64ID = Annons_AnnonsId FROM inserted --tilldelar variabel id på annonsen som sätts in i tabellen
 	SET &#64FöretagsAnnons = (SELECT Discriminator FROM Annons WHERE AnnonsId = &#64ID) -- Tilldelar discriminator 
-	SET &#64AnnonsURL = (SELECT AnnonsURL FROM Annons WHERE AnnonsId = &#64ID) -- tilldelar annonsURL 
 	IF (&#64FöretagsAnnons = 'ForetagsAnnons') --Kontrollerar om annonsen är en företagsannons
 		BEGIN
-		DECLARE Epost CURSOR FOR --alokerar en cursor för att loopa genom table nedan.
-		SELECT Anvandares.MailAdress --Table som samlar mailadresser på användare som har personAnnonser med taggar som matchar Företagsannonsen
-		FROM Tags, TagAnnons, Annons
-			INNER JOIN Anvandares
-			ON Annons.AnvandareRefId = Anvandares.AnvandareId
-		WHERE Discriminator = 'PersonAnnons' 
-		AND TagAnnons.Annons_AnnonsId = Annons.AnnonsId 
-		AND TagAnnons.Tag_TagId = Tags.TagId
-		AND TagId = &#64Tag
-				OPEN Epost --Öppnar Cursorn
-				FETCH NEXT FROM Epost INTO &#64Adress -- kollar första raden
+			
+		DECLARE match CURSOR FOR --alokerar en cursor för att loopa genom table nedan.
+		SELECT AnvandareRefId
+		FROM TagAnnons, Tags, Annons
+		WHERE TagAnnons.Annons_AnnonsId = Annons.AnnonsId AND TagAnnons.Tag_TagId = Tags.TagId
+		AND Annons.Discriminator = 'PersonAnnons'
+		AND Tag_TagId = &#64Tag
+				OPEN match --Öppnar Cursorn
+				FETCH NEXT FROM match INTO &#64AId -- kollar första raden
 				WHILE(&#64&#64FETCH_STATUS = 0) --Om status är noll finns där fler rader
 				BEGIN
-						
-					PRINT 'Skickar notefikation till ' + &#64Adress + ' rörande match på taggar i annons: ' + &#64AnnonsURL --Skickar notifikation
-					FETCH NEXT FROM Epost INTO &#64Adress --går till nästa rad
+					
+					IF (( SELECT COUNT(Anvandare_AnvandareId) FROM AnvandareForetagsAnnons WHERE Anvandare_AnvandareId = &#64Aid AND ForetagsAnnons_AnnonsId = &#64ID) = 0 )
+					BEGIN
+					INSERT INTO AnvandareForetagsAnnons VALUES (&#64AId, &#64ID)
+					END
+					FETCH NEXT FROM match INTO &#64AId --går till nästa rad
 				END
 		
 		
-				CLOSE Epost --stänger cursorn
-				DEALLOCATE Epost --dealokerar cursorn
-				COMMIT TRANSACTION
+				CLOSE match --stänger cursorn
+				DEALLOCATE match --dealokerar cursorn
 		END
 	ELSE
 		BEGIN
-			ROLLBACK TRANSACTION --Om inte företagsannons rollback
+		SET &#64AId = (SELECT AnvandareRefId FROM Annons WHERE AnnonsId = &#64ID)
+		DECLARE match CURSOR FOR --alokerar en cursor för att loopa genom table nedan.
+		SELECT AnnonsId
+		FROM TagAnnons, Tags, Annons
+		WHERE TagAnnons.Annons_AnnonsId = Annons.AnnonsId AND TagAnnons.Tag_TagId = Tags.TagId
+		AND Annons.Discriminator = 'ForetagsAnnons'
+		AND Tag_TagId = &#64Tag
+				OPEN match --Öppnar Cursorn
+				FETCH NEXT FROM match INTO &#64Annons -- kollar första raden
+				WHILE(&#64&#64FETCH_STATUS = 0) --Om status är noll finns där fler rader
+				BEGIN			
+					
+					IF (( SELECT COUNT(Anvandare_AnvandareId) FROM AnvandareForetagsAnnons WHERE Anvandare_AnvandareId = &#64Aid AND ForetagsAnnons_AnnonsId = &#64Annons) = 0 )
+					BEGIN
+					INSERT INTO AnvandareForetagsAnnons VALUES (&#64AId, &#64Annons)
+					END
+					FETCH NEXT FROM match INTO &#64Annons --går till nästa rad
+				END
+		
+		
+				CLOSE match --stänger cursorn
+				DEALLOCATE match --dealokerar cursorn
 		END
+    COMMIT TRANSACTION
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRANSACTION --Om något går fel rollback
@@ -394,7 +415,17 @@ BEGIN
     JOIN Annons ON Anvandares.AnvandareId = Annons.AnvandareRefId
     WHERE AnvandareId = &#64ID
     GROUP BY ForNamn,EfterNamn,Titel, Beskrivning, PubliceringsDatum
-END;
+END
+
+GO
+
+--Returnera hela namnet och id i en sträng samt id i en separat tabell för samtliga registrerade användare
+CREATE PROC spRegistreradeAnvandare
+AS
+BEGIN
+    SELECT AnvandareId, CONCAT('Id: ' + CAST(AnvandareId as NVARCHAR(MAX)), +' - ', ForNamn, + ' ' + EfterNamn)
+	FROM Anvandares
+END
 
     </pre>
 

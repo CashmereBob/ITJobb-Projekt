@@ -165,11 +165,11 @@
             </asp:SqlDataSource>
             <hr>
              <p class="lead">Välj inloggad användare:</p>
-            <asp:DropDownList ID="DropDownList5" runat="server" AutoPostBack="True" DataSourceID="SqlDataSource15" DataTextField="AnvandareId" DataValueField="AnvandareId" CssClass="form-control">
+            <asp:DropDownList ID="DropDownList5" runat="server" AutoPostBack="True" DataSourceID="SqlDataSource15" DataTextField="Column1" DataValueField="AnvandareId" CssClass="form-control">
             </asp:DropDownList>
         <br />
-            <asp:SqlDataSource ID="SqlDataSource15" runat="server" ConnectionString="<%$ ConnectionStrings:ITJobbDBConnectionString %>" SelectCommand="SELECT * FROM [Anvandares]"></asp:SqlDataSource> 
-             <p class="lead">Lista jobb som användare sökt:</p>
+            <asp:SqlDataSource ID="SqlDataSource15" runat="server" ConnectionString="<%$ ConnectionStrings:ITJobbDBConnectionString %>" SelectCommand="spRegistreradeAnvandare" SelectCommandType="StoredProcedure"></asp:SqlDataSource> 
+             <p class="lead">Lista tipsade jobb:</p>
         <asp:GridView ID="GridView11" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource16" CssClass= "table table-striped table-bordered table-condensed">
                 <Columns>
                     <asp:BoundField DataField="Titel" HeaderText="Titel" SortExpression="Titel" />
