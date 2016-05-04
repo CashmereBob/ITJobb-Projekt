@@ -482,8 +482,6 @@ namespace ITJobb.Models
 
             context.SaveChanges();
 
-            anvandare1.ForetagsAnnonser.Add(foretagsannons1);
-            anvandare1.ForetagsAnnonser.Add(foretagsannons5);
             anvandare2.ForetagsAnnonser.Add(foretagsannons2);
             anvandare2.ForetagsAnnonser.Add(foretagsannons4);
             anvandare3.ForetagsAnnonser.Add(foretagsannons3);

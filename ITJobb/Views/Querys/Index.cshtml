@@ -13,7 +13,7 @@ USE ITJobbDB
 GO
 
 --Trigger För Att skicka notifikationer om företagsannons matchar personannons
-        CREATE TRIGGER trEmailMatch  -- namn på trigger
+CREATE TRIGGER trEmailMatchAdd  -- namn på trigger
 ON TagAnnons -- Vilken table triggern ska vara på
 FOR INSERT -- Triggern aktiveras när något sätts in i tablen
 AS
@@ -22,11 +22,75 @@ BEGIN
 	BEGIN TRANSACTION -- Sätter igång transaktion
 	DECLARE &#64Tag INT --allokerar minne för variabler
 	DECLARE &#64ID INT
-	DECLARE &#64AId INT
-	DECLARE &#64FöretagsAnnons NVARCHAR(MAX)
-	DECLARE &#64Annons INT
 	SELECT &#64Tag = Tag_TagId FROM inserted --tilldelar variabel id på taggen som sätts in i tabellen
 	SELECT &#64ID = Annons_AnnonsId FROM inserted --tilldelar variabel id på annonsen som sätts in i tabellen
+	EXEC spAddAnvandareForetagsAnnons &#64ID, &#64Tag
+    COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION --Om något går fel rollback
+	END CATCH;
+END
+GO
+
+--Trigger För Att Tabort notifikationer om företagsannons matchar personannons
+CREATE TRIGGER trEmailMatchRemove  -- namn på trigger
+ON TagAnnons -- Vilken table triggern ska vara på
+FOR DELETE -- Triggern aktiveras när något sätts in i tablen
+AS
+BEGIN
+    BEGIN TRY -- sätter igång en try catch
+	BEGIN TRANSACTION -- Sätter igång transaktion
+	DECLARE &#64Tag INT --allokerar minne för variabler
+	DECLARE &#64ID INT
+	SELECT &#64Tag = Tag_TagId FROM deleted --tilldelar variabel id på taggen som sätts in i tabellen
+	SELECT &#64ID = Annons_AnnonsId FROM deleted --tilldelar variabel id på annonsen som sätts in i tabellen
+	EXEC spDeleteAnvandareForetagsAnnons &#64ID, &#64Tag
+    COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION --Om något går fel rollback
+	END CATCH;
+END
+GO
+
+--Trigger För Att Uppdatera notifikationer om företagsannons matchar personannons
+CREATE TRIGGER trEmailMatchUpdate  -- namn på trigger
+ON TagAnnons -- Vilken table triggern ska vara på
+FOR UPDATE -- Triggern aktiveras när något sätts in i tablen
+AS
+BEGIN
+    BEGIN TRY -- sätter igång en try catch
+	BEGIN TRANSACTION -- Sätter igång transaktion
+
+	DECLARE &#64Tag INT --allokerar minne för variabler
+	DECLARE &#64ID INT
+	DECLARE &#64TagDel INT
+	DECLARE &#64IDDel INT
+
+	SELECT &#64TagDel = Tag_TagId FROM deleted --tilldelar variabel id på taggen som sätts in i tabellen
+	SELECT &#64IDDel = Annons_AnnonsId FROM deleted --tilldelar variabel id på annonsen som sätts in i tabellen
+	EXEC spDeleteAnvandareForetagsAnnons &#64IDDel, &#64TagDel
+	SELECT &#64Tag = Tag_TagId FROM inserted --tilldelar variabel id på taggen som sätts in i tabellen
+	SELECT &#64ID = Annons_AnnonsId FROM inserted --tilldelar variabel id på annonsen som sätts in i tabellen
+	EXEC spAddAnvandareForetagsAnnons &#64ID, &#64Tag
+	
+    COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION --Om något går fel rollback
+	END CATCH;
+END
+GO
+
+--Lägger till användare företags relation genom trigger
+CREATE PROC spAddAnvandareForetagsAnnons(&#64ID INT, &#64Tag INT)	
+AS
+BEGIN
+	
+	DECLARE &#64Annons INT
+	DECLARE &#64AId INT
+	DECLARE &#64FöretagsAnnons NVARCHAR(MAX)
 	SET &#64FöretagsAnnons = (SELECT Discriminator FROM Annons WHERE AnnonsId = &#64ID) -- Tilldelar discriminator 
 	IF (&#64FöretagsAnnons = 'ForetagsAnnons') --Kontrollerar om annonsen är en företagsannons
 		BEGIN
@@ -78,11 +142,64 @@ BEGIN
 				CLOSE match --stänger cursorn
 				DEALLOCATE match --dealokerar cursorn
 		END
-    COMMIT TRANSACTION
-	END TRY
-	BEGIN CATCH
-		ROLLBACK TRANSACTION --Om något går fel rollback
-	END CATCH;
+END
+GO
+
+
+--Tarbort användareFöretagsannons genom trigger
+CREATE PROC spDeleteAnvandareForetagsAnnons(&#64AnnonsId INT, &#64Tag INT)	
+AS
+BEGIN
+	
+        	DECLARE &#64AnvandareId INT
+	DECLARE &#64AnnonsTyp NVARCHAR(MAX)
+	SET &#64AnnonsTyp =(SELECT Discriminator FROM Annons WHERE AnnonsId = &#64AnnonsId)
+	IF (&#64AnnonsTyp = 'ForetagsAnnons')
+	BEGIN
+		SET &#64AnvandareId =
+		(
+		SELECT AnvandareId
+		FROM Annons, Anvandares, AnvandareForetagsAnnons
+		WHERE AnnonsId = &#64AnnonsId
+			AND AnvandareForetagsAnnons.Anvandare_AnvandareId = Anvandares.AnvandareId
+			AND AnvandareForetagsAnnons.ForetagsAnnons_AnnonsId = Annons.AnnonsId
+		)
+	
+		DELETE FROM AnvandareForetagsAnnons WHERE Anvandare_AnvandareId = &#64AnvandareId AND ForetagsAnnons_AnnonsId = &#64AnnonsId
+	END
+	ELSE
+	BEGIN
+		
+		
+		SET &#64AnvandareId = ( SELECT AnvandareRefId FROM Annons WHERE AnnonsId = &#64AnnonsId )
+		DECLARE &#64AnnonsMatch INT
+		DECLARE match CURSOR FOR 
+		SELECT AnvandareForetagsAnnons.ForetagsAnnons_AnnonsId
+		FROM AnvandareForetagsAnnons
+		WHERE AnvandareForetagsAnnons.Anvandare_AnvandareId = &#64AnvandareId --fyll i variable
+				OPEN match --Öppnar Cursorn
+				FETCH NEXT FROM match INTO &#64AnnonsMatch -- kollar första raden
+				WHILE(&#64&#64FETCH_STATUS = 0) --Om status är noll finns där fler rader
+				BEGIN
+					
+					IF ((
+						SELECT COUNT(Annons.AnnonsId)
+						FROM Annons, TagAnnons, Tags
+						WHERE TagAnnons.Annons_AnnonsId = Annons.AnnonsId
+							AND TagAnnons.Tag_TagId = Tags.TagId
+							AND TagId = &#64Tag
+							AND Annons.AnnonsId = &#64AnnonsMatch) = 1
+							)
+					BEGIN
+						DELETE FROM AnvandareForetagsAnnons WHERE Anvandare_AnvandareId = &#64AnvandareId AND ForetagsAnnons_AnnonsId = &#64AnnonsMatch
+					END
+					FETCH NEXT FROM match INTO &#64AnnonsMatch --går till nästa rad
+				END
+		
+		
+				CLOSE match --stänger cursorn
+				DEALLOCATE match --dealokerar cursorn
+		END
 END
 GO
 
